@@ -20,6 +20,7 @@ module.exports = {
           '@screens': './src/screens',
           '@components': './src/components',
           '@assets': './src/assets',
+          '@config': './src/config',
         },
       },
     ],
