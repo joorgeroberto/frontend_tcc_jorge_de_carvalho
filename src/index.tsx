@@ -1,8 +1,13 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { View } from 'react-native';
+import { Provider } from 'react-redux';
+import { store } from './store';
 
-const App = () => <Container />;
+const App = () => (
+  <Provider store={store}>
+    <Container />
+  </Provider>
+);
 
 export const Container = styled.View`
   flex: 1;
