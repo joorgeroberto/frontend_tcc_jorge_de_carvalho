@@ -1,5 +1,5 @@
 import React from 'react';
-import { BackButton } from '@components/BackButton';
+import { BackButton, InputWithLabel } from '@components/index';
 import {
   Container,
   Image,
@@ -24,10 +24,12 @@ export function Login() {
         <Image resizeMode="contain" source={require('@assets/images/login_screen_image.png')} />
       </ImageContainer>
 
-      <InputsContainer />
+      <InputsContainer>
+        <InputWithLabel label={'Email:'} />
+      </InputsContainer>
 
       <BottomContainer>
-        <LoginButton label="Login" onPress={() => {}} />
+        <LoginButton disabled label="Login" onPress={() => {}} />
         <SignUpTextContainer>
           <SignUpText>É um novo usuário?</SignUpText>
           <SignUpButton>

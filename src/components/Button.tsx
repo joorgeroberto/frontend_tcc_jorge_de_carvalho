@@ -9,6 +9,7 @@ type Props = {
   width?: number;
   height?: number;
   loading?: boolean;
+  disabled?: boolean;
   textColor?: string;
   labelFontWeight?: string | number;
 } & ViewProps;
@@ -22,12 +23,13 @@ export function Button(props: Props) {
     loading,
     width = 254,
     height = 45,
+    disabled = false,
     ...others
   } = props;
 
   return (
-    <TouchableOpacity onPress={onPress} testID="button">
-      <Container width={width} height={height} {...others}>
+    <TouchableOpacity onPress={() => (disabled ? {} : onPress())} testID="button">
+      <Container disabled={disabled} width={width} height={height} {...others}>
         {loading ? (
           <ActivityIndicator testID="button-loading" size={24} color={colors.WHITE} />
         ) : (
@@ -43,6 +45,7 @@ export function Button(props: Props) {
 interface ContainerProps {
   width: number;
   height: number;
+  disabled: boolean;
 }
 
 interface LabelProps {
@@ -54,7 +57,7 @@ const Container = styled.View<ContainerProps>`
   width: ${({ width }) => (width ? width : 254)}px;
   height: ${({ height }) => (height ? height : 45)}px;
   border-radius: 10px;
-  background-color: ${colors.PRIMARY};
+  background-color: ${({ disabled }) => (disabled ? colors.GRAY1 : colors.PRIMARY)};
   align-items: center;
   justify-content: center;
 `;
