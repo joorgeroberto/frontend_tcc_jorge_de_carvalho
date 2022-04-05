@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
-import { Button } from '@components/Button';
+import { Button, InputWithLabel as Input } from '@components/index';
 import colors from '@config/colors';
 const windowWidth = Dimensions.get('window').width;
 
@@ -55,3 +55,7 @@ export const InputsContainer = styled.View`
 `;
 
 export const BottomContainer = styled.View``;
+
+export const InputWithLabel = styled(Input)`
+  margin-bottom: 15px;
+`;
