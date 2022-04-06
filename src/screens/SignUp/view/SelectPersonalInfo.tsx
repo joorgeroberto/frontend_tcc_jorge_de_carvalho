@@ -10,6 +10,8 @@ interface Props {
   onPress: () => void;
 }
 
+const maxPhoneLength = 15;
+
 export function SelectPersonalInfo({ onPress }: Props) {
   const [phone, setPhone] = useState('');
   const validationSchema = yup.object().shape({
@@ -18,13 +20,11 @@ export function SelectPersonalInfo({ onPress }: Props) {
     phone: yup
       .string()
       .required('O telefone não pode ser vazio.')
-      .min(1, 'Digite um telefone válido.'),
-    // .max(15, 'Digite um telefone válido.'),
+      .length(maxPhoneLength, 'Digite um telefone válido.'),
   });
 
   const {
     control,
-    getValues,
     setValue,
     register,
     handleSubmit,
@@ -60,19 +60,24 @@ export function SelectPersonalInfo({ onPress }: Props) {
       <Controller
         control={control}
         name="phone"
-        render={({ field: { onChange, value }, fieldState: { error } }) => {
+        render={({ field: { onChange, value: savedValue }, fieldState: { error } }) => {
           return (
             <Input
               label={'Telefone:'}
               marginBottom={15}
-              value={value}
+              value={savedValue}
               placeholder={'(79) 99999-9999'}
+              keyboardType={'decimal-pad'}
               mask={text => {
-                const maskedvalue = text
+                const isMaxPhoneLength = text.length > maxPhoneLength;
+                if (isMaxPhoneLength) {
+                  return savedValue;
+                }
+                const replacedText = text.replace(/[^0-9]/g, '');
+                return replacedText
                   .replace(/^(\d{2})(\d{1})/, '($1) $2')
-                  .replace(/^\((\d{2})\) (\d{1})(\d{1})/, '($1) $2 $3')
-                  .replace(/^\((\d{2})\) (\d{1}) (\d{4})(\d{1,4})/, '($1) $2$3-$4');
-                return maskedvalue;
+                  .replace(/^\((\d{2})\) (\d{5})/, '($1) $2')
+                  .replace(/^\((\d{2})\) (\d{5})(\d{1,4})/, '($1) $2-$3');
               }}
               onChangeText={onChange}
               error={error?.message}

@@ -1,11 +1,13 @@
 import React from 'react';
 import colors from '@config/colors';
 import styled from 'styled-components/native';
+import { KeyboardTypeOptions } from 'react-native';
 
 interface InputProps {
   label: string;
   value?: string;
   placeholder?: string;
+  keyboardType?: KeyboardTypeOptions;
   error?: string | undefined;
   secureTextEntry?: boolean;
   marginBottom?: number;
@@ -17,6 +19,7 @@ export function InputWithLabel({
   label,
   value,
   mask,
+  keyboardType = 'default',
   onChangeText,
   placeholder = 'Digite o seu texto!',
   secureTextEntry = false,
@@ -27,6 +30,7 @@ export function InputWithLabel({
     <Container marginBottom={marginBottom}>
       <StyledText>{label}</StyledText>
       <StyledTextInput
+        keyboardType={keyboardType}
         errorExists={!!error}
         value={value}
         placeholder={placeholder}
