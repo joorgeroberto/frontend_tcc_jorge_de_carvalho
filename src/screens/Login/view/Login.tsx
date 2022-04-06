@@ -56,6 +56,7 @@ export function Login() {
         <InputWithLabel
           label={'Email:'}
           marginBottom={15}
+          keyboardType={'email-address'}
           placeholder={'email@email.com'}
           onChangeText={text => setValue('email', text)}
           error={errors?.email?.message}

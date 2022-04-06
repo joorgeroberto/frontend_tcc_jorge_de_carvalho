@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Container, Input, ImageContainer, Button } from '../styles/SelectPersonalInfo.styles';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Alert } from 'react-native';
-import { RegisterActions } from '@storeData/actions';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 interface Props {
   onPress: () => void;
@@ -13,7 +12,6 @@ interface Props {
 const maxPhoneLength = 15;
 
 export function SelectPersonalInfo({ onPress }: Props) {
-  const [phone, setPhone] = useState('');
   const validationSchema = yup.object().shape({
     name: yup.string().required('O nome não pode ser vazio.').min(3, 'Digite um nome válido'),
     email: yup.string().required('O email não pode ser vazio.').email('Digite um email válido.'),
@@ -38,13 +36,20 @@ export function SelectPersonalInfo({ onPress }: Props) {
     },
   });
 
-  useEffect(() => {
-    register('name');
-    register('email');
-    register('phone');
-  });
-
   const onSubmit = (data: any) => console.log(data);
+
+  // const result = launchImageLibrary({
+  //   title: 'Select Image',
+  //   type: 'library',
+  //   options: {
+  //     maxWidth: 1920,
+  //     maxHeight: 1080,
+  //     selectionLimit: 0,
+  //     mediaType: 'photo',
+  //     includeBase64: false,
+  //     quality: 1,
+  //   },
+  // });
 
   return (
     <Container>
@@ -88,6 +93,7 @@ export function SelectPersonalInfo({ onPress }: Props) {
       <Input
         label={'Email:'}
         marginBottom={15}
+        keyboardType={'email-address'}
         placeholder={'email@email.com'}
         onChangeText={text => setValue('email', text)}
         error={errors?.email?.message}
