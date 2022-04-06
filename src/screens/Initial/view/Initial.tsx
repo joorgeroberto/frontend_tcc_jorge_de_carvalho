@@ -19,7 +19,7 @@ export function Initial() {
 
       <ButtonsContainer>
         <LoginButton label="Login" onPress={() => navigate('Login')} />
-        <SignUpButton label="Cadastre-se" onPress={() => {}} />
+        <SignUpButton label="Cadastre-se" onPress={() => navigate('SignUp')} />
       </ButtonsContainer>
     </Container>
   );

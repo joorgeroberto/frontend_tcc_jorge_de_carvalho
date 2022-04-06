@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BackButton } from '@components/index';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -35,7 +35,13 @@ export function Login() {
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(validationSchema) });
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
   const onSubmit = (data: any) => Alert.alert(data.email, data.password);
 
@@ -68,7 +74,7 @@ export function Login() {
         <LoginButton label="Login" onPress={handleSubmit(onSubmit)} />
         <SignUpTextContainer>
           <SignUpText>É um novo usuário?</SignUpText>
-          <SignUpButton>
+          <SignUpButton onPress={() => navigation.navigate('SignUp')}>
             <SignUpButtonLabel>Cadastre-se</SignUpButtonLabel>
           </SignUpButton>
         </SignUpTextContainer>

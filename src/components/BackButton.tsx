@@ -17,7 +17,7 @@ export function BackButton(props: Props) {
         width={width}
         height={height}
         resizeMode="contain"
-        source={require('@assets/images/back_icon.png')}
+        source={require('@assets/icons/back_icon.png')}
       />
     </Container>
   );

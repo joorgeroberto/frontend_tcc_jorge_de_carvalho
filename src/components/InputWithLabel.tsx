@@ -10,11 +10,13 @@ interface InputProps {
   secureTextEntry?: boolean;
   marginBottom?: number;
   onChangeText: (text: string) => void;
+  mask?: (text: string) => string;
 }
 
 export function InputWithLabel({
   label,
   value,
+  mask,
   onChangeText,
   placeholder = 'Digite o seu texto!',
   secureTextEntry = false,
@@ -29,7 +31,13 @@ export function InputWithLabel({
         value={value}
         placeholder={placeholder}
         secureTextEntry={secureTextEntry}
-        onChangeText={onChangeText}
+        onChangeText={text => {
+          if (mask) {
+            const maskedValue = mask(text);
+            return onChangeText(maskedValue);
+          }
+          return onChangeText(text);
+        }}
       />
       {error && <StyledTextError>{error}</StyledTextError>}
     </Container>

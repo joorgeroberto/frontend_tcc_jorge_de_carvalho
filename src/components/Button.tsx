@@ -1,6 +1,6 @@
 import colors from '@config/colors';
 import React from 'react';
-import { ActivityIndicator, TouchableOpacity, ViewProps } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, ViewProps, ImageSourcePropType } from 'react-native';
 import styled from 'styled-components/native';
 
 type Props = {
@@ -11,12 +11,14 @@ type Props = {
   loading?: boolean;
   disabled?: boolean;
   textColor?: string;
+  imageSource?: ImageSourcePropType;
   labelFontWeight?: string | number;
 } & ViewProps;
 
 export function Button(props: Props) {
   const {
     label,
+    imageSource,
     textColor = colors.WHITE,
     labelFontWeight = 700,
     onPress,
@@ -33,9 +35,12 @@ export function Button(props: Props) {
         {loading ? (
           <ActivityIndicator testID="button-loading" size={24} color={colors.WHITE} />
         ) : (
-          <Label fontWeight={labelFontWeight} color={textColor}>
-            {label}
-          </Label>
+          <>
+            {imageSource && <Image source={imageSource} />}
+            <Label fontWeight={labelFontWeight} color={textColor}>
+              {label}
+            </Label>
+          </>
         )}
       </Container>
     </TouchableOpacity>
@@ -65,4 +70,15 @@ const Container = styled.View<ContainerProps>`
 const Label = styled.Text<LabelProps>`
   font-weight: ${({ fontWeight }) => fontWeight};
   color: ${({ color }) => color};
+`;
+
+const Image = styled.Image.attrs({
+  resizeMode: 'contain',
+})`
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 15px;
 `;
