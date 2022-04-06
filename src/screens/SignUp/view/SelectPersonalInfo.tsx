@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Input, ImageContainer, Button } from '../styles/SelectPersonalInfo.styles';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert } from 'react-native';
@@ -23,6 +23,7 @@ export function SelectPersonalInfo({ onPress }: Props) {
   });
 
   const {
+    control,
     getValues,
     setValue,
     register,
@@ -48,6 +49,7 @@ export function SelectPersonalInfo({ onPress }: Props) {
   return (
     <Container>
       <ImageContainer />
+
       <Input
         label={'Nome:'}
         marginBottom={15}
@@ -55,23 +57,28 @@ export function SelectPersonalInfo({ onPress }: Props) {
         onChangeText={text => setValue('name', text)}
         error={errors?.name?.message}
       />
-      <Input
-        label={'Telefone:'}
-        marginBottom={15}
-        placeholder={'(79) 99999-9999'}
-        mask={text => {
-          const maskedvalue = text
-            .replace(/^(\d{2})(\d{1})/, '($1) $2')
-            .replace(/^\((\d{2})\) (\d{1})(\d{1})/, '($1) $2 $3')
-            .replace(/^\((\d{2})\) (\d{1}) (\d{4})(\d{1,4})/, '($1) $2$3-$4');
-          // console.log('maskedvalue', maskedvalue);
-          return maskedvalue;
+      <Controller
+        control={control}
+        name="phone"
+        render={({ field: { onChange, value }, fieldState: { error } }) => {
+          return (
+            <Input
+              label={'Telefone:'}
+              marginBottom={15}
+              value={value}
+              placeholder={'(79) 99999-9999'}
+              mask={text => {
+                const maskedvalue = text
+                  .replace(/^(\d{2})(\d{1})/, '($1) $2')
+                  .replace(/^\((\d{2})\) (\d{1})(\d{1})/, '($1) $2 $3')
+                  .replace(/^\((\d{2})\) (\d{1}) (\d{4})(\d{1,4})/, '($1) $2$3-$4');
+                return maskedvalue;
+              }}
+              onChangeText={onChange}
+              error={error?.message}
+            />
+          );
         }}
-        onChangeText={text => {
-          // console.log('text', text);
-          setValue('phone', text);
-        }}
-        error={errors?.phone?.message}
       />
       <Input
         label={'Email:'}
