@@ -19,6 +19,10 @@ export function SignUp() {
     phone: '',
     image: '',
   });
+  const [genderAndBirthday, setGenderAndBirthday] = useState<SelectGenderAndBirthdayReturnData>({
+    gender: 'male',
+    birthday: '',
+  });
 
   const toPreviousStep = () => {
     if (step > 0) {
@@ -53,7 +57,12 @@ export function SignUp() {
           />
         );
       case 2:
-        return <SelectGenderAndBirthday onPress={data => console.log(data)} />;
+        return (
+          <SelectGenderAndBirthday
+            data={genderAndBirthday}
+            onPress={data => setGenderAndBirthday(data)}
+          />
+        );
       default:
         return (
           <SelectProfile

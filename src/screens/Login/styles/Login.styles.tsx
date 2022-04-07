@@ -4,10 +4,9 @@ import { Button, InputWithLabel as Input } from '@components/index';
 import colors from '@config/colors';
 const windowWidth = Dimensions.get('window').width;
 
-export const Container = styled.View`
+export const Container = styled.ScrollView`
   flex: 1;
   padding: 20px;
-  justify-content: space-between;
   background-color: white;
 `;
 
@@ -54,7 +53,9 @@ export const InputsContainer = styled.View`
   flex: 1;
 `;
 
-export const BottomContainer = styled.View``;
+export const BottomContainer = styled.View`
+  margin-top: 40px;
+`;
 
 export const InputWithLabel = styled(Input)`
   margin-bottom: 15px;

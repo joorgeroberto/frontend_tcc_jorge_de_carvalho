@@ -23,3 +23,8 @@ export const Image = styled.Image`
   width: ${windowWidth * 0.488}px;
   height: ${windowWidth * 0.5973}px;
 `;
+
+export const Button = styled(RawButton)`
+  width: 100%;
+  margin-top: 20px;
+`;

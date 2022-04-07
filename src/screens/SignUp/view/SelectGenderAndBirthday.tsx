@@ -1,24 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
+  Button as StyledButton,
   Input,
+  InputContainer,
   ImageContainer,
   Image,
   StyledTextError,
 } from '../styles/SelectGenderAndBirthday.styles';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { GenderTabs } from '@components/GenderTabs';
+import { GenderTabs } from './GenderTabs';
+import { DateSelector } from './DateSelector';
 
 interface Props {
   data: SelectGenderAndBirthdayReturnData;
   onPress: (data: SelectGenderAndBirthdayReturnData) => void;
 }
 
-export function SelectGenderAndBirthday({ data, onPress }: Props) {
-  const [selectedTab, setSelectedTab] = useState<Gender>({ type: 'male', name: 'Masculino' });
+export function SelectGenderAndBirthday({ data: { gender, birthday }, onPress }: Props) {
+  const validationSchema = yup.object().shape({
+    birthday: yup.string().required('Selecione uma data de nascimento.'),
+  });
+
+  const { control, handleSubmit } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      birthday,
+      gender,
+    },
+  });
+
+  const onSubmit = (info: any) => onPress(info);
 
   return (
     <Container>
@@ -26,7 +41,11 @@ export function SelectGenderAndBirthday({ data, onPress }: Props) {
         <Image source={require('@assets/images/signup_running_man_image.png')} />
       </ImageContainer>
 
-      <GenderTabs selectedTab={selectedTab} onPress={setSelectedTab} />
+      <GenderTabs control={control} />
+
+      <DateSelector control={control} />
+
+      <StyledButton label={'Próximo'} onPress={handleSubmit(onSubmit)} />
     </Container>
   );
 }

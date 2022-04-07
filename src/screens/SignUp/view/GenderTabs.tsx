@@ -1,10 +1,16 @@
 import colors from '@config/colors';
 import React, { useCallback } from 'react';
 import styled from 'styled-components/native';
+import { Controller } from 'react-hook-form';
 
-interface Props {
-  selectedTab: Gender;
-  onPress: (selectedOption: Gender) => void;
+interface GenderTabsProps {
+  control: any;
+}
+
+interface RenderTabProps {
+  index: number;
+  selectedTab: string;
+  onPress: (selectedTab: string) => void;
 }
 
 const genderOptions: Array<Gender> = [
@@ -13,31 +19,38 @@ const genderOptions: Array<Gender> = [
   { type: 'other', name: 'Outro' },
 ];
 
-export function GenderTabs({ selectedTab, onPress }: Props) {
-  const renderTab = useCallback(
-    (index: number) => {
-      const isSelected = genderOptions[index].type === selectedTab.type;
-      return (
-        <Tab
-          isSelected={isSelected}
-          tabsQuantity={genderOptions.length}
-          onPress={() => onPress(genderOptions[index])}>
-          <TabLabel isSelected={isSelected}>{genderOptions[index].name}</TabLabel>
-        </Tab>
-      );
-    },
-    [onPress, selectedTab],
-  );
+export function GenderTabs({ control }: GenderTabsProps) {
+  const renderTab = useCallback(({ index, selectedTab, onPress }: RenderTabProps) => {
+    const isSelected = genderOptions[index].type === selectedTab;
+    return (
+      <Tab
+        isSelected={isSelected}
+        tabsQuantity={genderOptions.length}
+        onPress={() => onPress(genderOptions[index].type)}>
+        <TabLabel isSelected={isSelected}>{genderOptions[index].name}</TabLabel>
+      </Tab>
+    );
+  }, []);
 
   return (
-    <Container>
-      <Label>Sexo:</Label>
-      <TabsContainer>
-        {Array.from(Array(genderOptions.length).keys()).map(index => {
-          return renderTab(index);
-        })}
-      </TabsContainer>
-    </Container>
+    <Controller
+      control={control}
+      name="gender"
+      render={({ field: { onChange, value: selectedTab } }) => {
+        return (
+          <>
+            <Container>
+              <Label>Sexo:</Label>
+              <TabsContainer>
+                {Array.from(Array(genderOptions.length).keys()).map(index => {
+                  return renderTab({ index: index, selectedTab, onPress: onChange });
+                })}
+              </TabsContainer>
+            </Container>
+          </>
+        );
+      }}
+    />
   );
 }
 
