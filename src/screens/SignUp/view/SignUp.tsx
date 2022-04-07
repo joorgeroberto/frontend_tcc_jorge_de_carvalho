@@ -13,7 +13,12 @@ export function SignUp() {
   const [title, setTitle] = useState('Cadastre-se');
   const [step, setStep] = useState(0);
   const [userType, setUserType] = useState('');
-  const [personalInfoData, setPersonalInfoData] = useState<SelectPersonalInfoReturnData>();
+  const [personalInfoData, setPersonalInfoData] = useState<SelectPersonalInfoReturnData>({
+    name: '',
+    email: '',
+    phone: '',
+    image: '',
+  });
 
   const toPreviousStep = () => {
     if (step > 0) {
@@ -40,6 +45,7 @@ export function SignUp() {
       case 1:
         return (
           <SelectPersonalInfo
+            data={personalInfoData}
             onPress={data => {
               setPersonalInfoData(data);
               toNextStep();
