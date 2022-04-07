@@ -5,7 +5,7 @@ interface RegisterState {
 }
 
 const registerInitialState: RegisterState = {
-  name: 'Jorge',
+  name: undefined,
 };
 
 export const RegisterReducer = (

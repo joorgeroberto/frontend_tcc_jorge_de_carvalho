@@ -2,18 +2,18 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { Provider } from 'react-redux';
 import { store } from './store';
+import Routes from '@screens/Routes';
 
 const App = () => (
   <Provider store={store}>
-    <Container />
+    <SafeAreaView>
+      <Routes />
+    </SafeAreaView>
   </Provider>
 );
 
-export const Container = styled.View`
+export const SafeAreaView = styled.SafeAreaView`
   flex: 1;
-  background-color: red;
-  align-items: center;
-  justify-content: center;
 `;
 
 export default App;
