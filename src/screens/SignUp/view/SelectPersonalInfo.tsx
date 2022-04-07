@@ -1,12 +1,19 @@
-import React from 'react';
-import { Container, Input, ImageContainer, Button } from '../styles/SelectPersonalInfo.styles';
+import React, { useState } from 'react';
+import {
+  Container,
+  Input,
+  ImageContainer,
+  Button,
+  Image,
+  StyledTextError,
+} from '../styles/SelectPersonalInfo.styles';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { launchImageLibrary } from 'react-native-image-picker';
 
 interface Props {
-  onPress: () => void;
+  onPress: (data: SelectPersonalInfoReturnData) => void;
 }
 
 const maxPhoneLength = 15;
@@ -19,12 +26,12 @@ export function SelectPersonalInfo({ onPress }: Props) {
       .string()
       .required('O telefone não pode ser vazio.')
       .length(maxPhoneLength, 'Digite um telefone válido.'),
+    image: yup.string().required('Por favor, clique no círculo acima e selecione uma imagem.'),
   });
 
   const {
     control,
     setValue,
-    register,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -33,27 +40,46 @@ export function SelectPersonalInfo({ onPress }: Props) {
       name: '',
       email: '',
       phone: '',
+      image: '',
     },
   });
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: any) => onPress(data);
 
-  // const result = launchImageLibrary({
-  //   title: 'Select Image',
-  //   type: 'library',
-  //   options: {
-  //     maxWidth: 1920,
-  //     maxHeight: 1080,
-  //     selectionLimit: 0,
-  //     mediaType: 'photo',
-  //     includeBase64: false,
-  //     quality: 1,
-  //   },
-  // });
+  const getImage = async () => {
+    try {
+      const { assets } = await launchImageLibrary({
+        maxWidth: 1920,
+        maxHeight: 1080,
+        selectionLimit: 1,
+        mediaType: 'photo',
+        includeBase64: false,
+        quality: 1,
+      });
+
+      const isValidImage = assets && assets?.length > 0;
+      if (isValidImage) {
+        return assets?.[0].uri as string;
+      }
+    } catch (error) {
+      return '';
+    }
+  };
 
   return (
     <Container>
-      <ImageContainer />
+      <Controller
+        control={control}
+        name="image"
+        render={({ field: { onChange, value }, fieldState: { error } }) => {
+          return (
+            <ImageContainer onPress={async () => onChange(await getImage())}>
+              <Image source={{ uri: value }} />
+              {error && error?.message && <StyledTextError>{error?.message}</StyledTextError>}
+            </ImageContainer>
+          );
+        }}
+      />
 
       <Input
         label={'Nome:'}
