@@ -2,16 +2,12 @@ import React, { useEffect, useState } from 'react';
 import {
   Container,
   Button as StyledButton,
-  Input,
-  InputContainer,
   ImageContainer,
   Image,
-  StyledTextError,
 } from '../styles/SelectGenderAndBirthday.styles';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { launchImageLibrary } from 'react-native-image-picker';
 import { GenderTabs } from './GenderTabs';
 import { DateSelector } from './DateSelector';
 

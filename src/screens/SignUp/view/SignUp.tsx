@@ -3,6 +3,7 @@ import { BackButton, ProgressBar } from '@components/index';
 import { SelectProfile } from './SelectProfile';
 import { SelectPersonalInfo } from './SelectPersonalInfo';
 import { SelectGenderAndBirthday } from './SelectGenderAndBirthday';
+import { SelectPassword } from './SelectPassword';
 import { Container, Header, HeaderTitle, EmptyView, StyledScroll } from '../styles/SignUp.styles';
 import { useNavigation } from '@react-navigation/native';
 
@@ -22,6 +23,11 @@ export function SignUp() {
   const [genderAndBirthday, setGenderAndBirthday] = useState<SelectGenderAndBirthdayReturnData>({
     gender: 'male',
     birthday: '',
+  });
+
+  const [passwordsData, setPasswordsData] = useState<SelectPasswordReturnData>({
+    password: '',
+    confirmedPassword: '',
   });
 
   const toPreviousStep = () => {
@@ -60,7 +66,20 @@ export function SignUp() {
         return (
           <SelectGenderAndBirthday
             data={genderAndBirthday}
-            onPress={data => setGenderAndBirthday(data)}
+            onPress={data => {
+              setGenderAndBirthday(data);
+              toNextStep();
+            }}
+          />
+        );
+      case 3:
+        return (
+          <SelectPassword
+            data={passwordsData}
+            onPress={data => {
+              setPasswordsData(data);
+              toNextStep();
+            }}
           />
         );
       default:

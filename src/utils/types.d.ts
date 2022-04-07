@@ -15,6 +15,11 @@ interface SelectGenderAndBirthdayReturnData {
   birthday: string;
 }
 
+interface SelectPasswordReturnData {
+  password: string;
+  confirmedPassword: string;
+}
+
 interface Gender {
   type: 'male' | 'female' | 'other';
   name: 'Masculino' | 'Feminino' | 'Outro';
