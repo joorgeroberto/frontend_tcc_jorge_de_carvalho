@@ -31,11 +31,7 @@ export function Login() {
       .min(6, 'A senha deve conter pelo menos 6 dígitos.'),
   });
 
-  const {
-    setValue,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
       email: '',
@@ -54,20 +50,20 @@ export function Login() {
 
       <InputsContainer>
         <InputWithLabel
+          name={'email'}
+          control={control}
           label={'Email:'}
           marginBottom={15}
           keyboardType={'email-address'}
           placeholder={'email@email.com'}
-          onChangeText={text => setValue('email', text)}
-          error={errors?.email?.message}
         />
 
         <InputWithLabel
           secureTextEntry
+          name={'password'}
+          control={control}
           label={'Password:'}
           placeholder={'********'}
-          onChangeText={text => setValue('password', text)}
-          error={errors?.password?.message}
         />
       </InputsContainer>
 

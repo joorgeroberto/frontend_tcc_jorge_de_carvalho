@@ -2,49 +2,61 @@ import React from 'react';
 import colors from '@config/colors';
 import styled from 'styled-components/native';
 import { KeyboardTypeOptions } from 'react-native';
+import { Controller } from 'react-hook-form';
+
+interface MaskProps {
+  newValue: string;
+  oldValue: string;
+}
 
 interface InputProps {
+  name: string;
   label: string;
-  value?: string;
+  control: any;
   placeholder?: string;
   keyboardType?: KeyboardTypeOptions;
-  error?: string | undefined;
   secureTextEntry?: boolean;
   marginBottom?: number;
-  onChangeText: (text: string) => void;
-  mask?: (text: string) => string;
+  mask?: ({ newValue, oldValue }: MaskProps) => string;
 }
 
 export function InputWithLabel({
+  name,
   label,
-  value,
   mask,
+  control,
   keyboardType = 'default',
-  onChangeText,
   placeholder = 'Digite o seu texto!',
   secureTextEntry = false,
   marginBottom,
-  error,
 }: InputProps) {
   return (
-    <Container marginBottom={marginBottom}>
-      <StyledText>{label}</StyledText>
-      <StyledTextInput
-        keyboardType={keyboardType}
-        errorExists={!!error}
-        value={value}
-        placeholder={placeholder}
-        secureTextEntry={secureTextEntry}
-        onChangeText={text => {
-          if (mask) {
-            const maskedValue = mask(text);
-            return onChangeText(maskedValue);
-          }
-          return onChangeText(text);
-        }}
-      />
-      {error && <StyledTextError>{error}</StyledTextError>}
-    </Container>
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { onChange, value }, fieldState: { error } }) => {
+        return (
+          <Container marginBottom={marginBottom}>
+            <StyledText>{label}</StyledText>
+            <StyledTextInput
+              keyboardType={keyboardType}
+              errorExists={!!error}
+              value={value}
+              placeholder={placeholder}
+              secureTextEntry={secureTextEntry}
+              onChangeText={text => {
+                if (mask) {
+                  const maskedValue = mask({ newValue: text, oldValue: value });
+                  return onChange(maskedValue);
+                }
+                return onChange(text);
+              }}
+            />
+            {error && <StyledTextError>{error?.message}</StyledTextError>}
+          </Container>
+        );
+      }}
+    />
   );
 }
 
