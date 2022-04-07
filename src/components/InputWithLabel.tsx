@@ -14,6 +14,7 @@ interface InputProps {
   label: string;
   control: any;
   placeholder?: string;
+  editable?: boolean;
   keyboardType?: KeyboardTypeOptions;
   secureTextEntry?: boolean;
   marginBottom?: number;
@@ -25,6 +26,7 @@ export function InputWithLabel({
   label,
   mask,
   control,
+  editable = true,
   keyboardType = 'default',
   placeholder = 'Digite o seu texto!',
   secureTextEntry = false,
@@ -39,6 +41,7 @@ export function InputWithLabel({
           <Container marginBottom={marginBottom}>
             <StyledText>{label}</StyledText>
             <StyledTextInput
+              editable={editable}
               keyboardType={keyboardType}
               errorExists={!!error}
               value={value}

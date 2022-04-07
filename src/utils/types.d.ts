@@ -9,3 +9,13 @@ interface SelectPersonalInfoReturnData {
   image: string;
   phone: string;
 }
+
+interface SelectGenderAndBirthdayReturnData {
+  gender: 'male' | 'female' | 'other';
+  birthday: string;
+}
+
+interface Gender {
+  type: 'male' | 'female' | 'other';
+  name: 'Masculino' | 'Feminino' | 'Outro';
+}
