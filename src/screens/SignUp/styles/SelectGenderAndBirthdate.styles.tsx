@@ -1,7 +1,6 @@
 import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
-import { Button as RawButton, InputWithLabel } from '@components/index';
-import colors from '@config/colors';
+import { Button as RawButton } from '@components/index';
 const windowWidth = Dimensions.get('window').width;
 
 export const Container = styled.ScrollView`
@@ -21,14 +20,6 @@ export const ImageContainer = styled.View`
 export const Image = styled.Image`
   width: ${windowWidth * 0.488}px;
   height: ${windowWidth * 0.5973}px;
-`;
-
-export const InputsContainer = styled.View`
-  flex: 1;
-`;
-
-export const Input = styled(InputWithLabel)`
-  margin-bottom: 15px;
 `;
 
 export const Button = styled(RawButton)`

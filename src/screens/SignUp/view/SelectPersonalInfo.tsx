@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
-import {
-  Container,
-  Input,
-  ImageContainer,
-  Button,
-  Image,
-  StyledTextError,
-} from '../styles/SelectPersonalInfo.styles';
-import { useForm, Controller } from 'react-hook-form';
+import { Container, Input, Button } from '../styles/SelectPersonalInfo.styles';
+import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { ImageSelector } from '@components/ImageSelector';
 
 interface Props {
   data: SelectPersonalInfoReturnData;
@@ -42,40 +35,9 @@ export function SelectPersonalInfo({ data: { name, email, phone, image }, onPres
 
   const onSubmit = (data: any) => onPress(data);
 
-  const getImage = async () => {
-    try {
-      const { assets } = await launchImageLibrary({
-        maxWidth: 1920,
-        maxHeight: 1080,
-        selectionLimit: 1,
-        mediaType: 'photo',
-        includeBase64: false,
-        quality: 1,
-      });
-
-      const isValidImage = assets && assets?.length > 0;
-      if (isValidImage) {
-        return assets?.[0].uri as string;
-      }
-    } catch (error) {
-      return '';
-    }
-  };
-
   return (
     <Container>
-      <Controller
-        control={control}
-        name="image"
-        render={({ field: { onChange, value }, fieldState: { error } }) => {
-          return (
-            <ImageContainer onPress={async () => onChange(await getImage())}>
-              <Image source={{ uri: value }} />
-              {error && error?.message && <StyledTextError>{error?.message}</StyledTextError>}
-            </ImageContainer>
-          );
-        }}
-      />
+      <ImageSelector name={'image'} control={control} />
 
       <Input
         name={'name'}

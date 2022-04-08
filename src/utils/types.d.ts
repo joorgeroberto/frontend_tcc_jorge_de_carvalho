@@ -10,14 +10,20 @@ interface SelectPersonalInfoReturnData {
   phone: string;
 }
 
-interface SelectGenderAndBirthdayReturnData {
+interface SelectGenderAndBirthdateReturnData {
   gender: 'male' | 'female' | 'other';
-  birthday: string;
+  birthdate: string;
 }
 
 interface SelectPasswordReturnData {
   password: string;
   confirmedPassword: string;
+}
+
+interface RegisterGroupReturnData {
+  groupName: string;
+  athletesQuantity: number;
+  groupImage: string;
 }
 
 interface Gender {

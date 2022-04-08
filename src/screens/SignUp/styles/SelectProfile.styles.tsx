@@ -3,11 +3,11 @@ import styled from 'styled-components/native';
 import { Button } from '@components/index';
 const windowWidth = Dimensions.get('window').width;
 
-export const Container = styled.View`
+export const Container = styled.ScrollView`
   flex: 1;
   width: 100%;
   padding: 20px;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   background-color: white;
 `;
 

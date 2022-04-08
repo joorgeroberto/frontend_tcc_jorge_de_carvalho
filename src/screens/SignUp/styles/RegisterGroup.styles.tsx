@@ -2,6 +2,9 @@ import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import { Button as RawButton, InputWithLabel } from '@components/index';
 import colors from '@config/colors';
+
+import { ImageSelector as ImagePicker } from '@components/ImageSelector';
+
 const windowWidth = Dimensions.get('window').width;
 
 export const Container = styled.View`
@@ -11,18 +14,19 @@ export const Container = styled.View`
   background-color: white;
 `;
 
-export const ImageContainer = styled.View`
+export const InputsContainer = styled.View`
   flex: 1;
-  justify-content: center;
-  align-items: center;
-  margin-top: 40px;
-  margin-bottom: 40px;
 `;
 
-export const Image = styled.Image`
-  width: ${windowWidth * 0.488}px;
-  height: ${windowWidth * 0.5973}px;
+export const Input = styled(InputWithLabel)`
+  margin-bottom: 15px;
 `;
+
+export const ImageSelector = styled(ImagePicker).attrs({
+  width: windowWidth * 0.533,
+  height: windowWidth * 0.533,
+  borderRadius: 20,
+})``;
 
 export const Button = styled(RawButton)`
   width: 100%;

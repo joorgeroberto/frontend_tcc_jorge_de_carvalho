@@ -30,7 +30,7 @@ export function DateSelector({ control }: Props) {
       <Label>Data de Nascimento:</Label>
       <Controller
         control={control}
-        name="birthday"
+        name="birthdate"
         render={({ field: { onChange, value }, fieldState: { error } }) => {
           return (
             <>

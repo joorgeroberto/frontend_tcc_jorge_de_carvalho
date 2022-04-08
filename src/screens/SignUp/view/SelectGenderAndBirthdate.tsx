@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
   Container,
-  Button as StyledButton,
+  Button,
   ImageContainer,
   Image,
-} from '../styles/SelectGenderAndBirthday.styles';
+} from '../styles/SelectGenderAndBirthdate.styles';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,19 +12,19 @@ import { GenderTabs } from './GenderTabs';
 import { DateSelector } from './DateSelector';
 
 interface Props {
-  data: SelectGenderAndBirthdayReturnData;
-  onPress: (data: SelectGenderAndBirthdayReturnData) => void;
+  data: SelectGenderAndBirthdateReturnData;
+  onPress: (data: SelectGenderAndBirthdateReturnData) => void;
 }
 
-export function SelectGenderAndBirthday({ data: { gender, birthday }, onPress }: Props) {
+export function SelectGenderAndBirthdate({ data: { gender, birthdate }, onPress }: Props) {
   const validationSchema = yup.object().shape({
-    birthday: yup.string().required('Selecione uma data de nascimento.'),
+    birthdate: yup.string().required('Selecione uma data de nascimento.'),
   });
 
   const { control, handleSubmit } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      birthday,
+      birthdate,
       gender,
     },
   });
@@ -41,7 +41,7 @@ export function SelectGenderAndBirthday({ data: { gender, birthday }, onPress }:
 
       <DateSelector control={control} />
 
-      <StyledButton label={'Próximo'} onPress={handleSubmit(onSubmit)} />
+      <Button label={'Próximo'} onPress={handleSubmit(onSubmit)} />
     </Container>
   );
 }

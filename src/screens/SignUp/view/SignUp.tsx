@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { BackButton, ProgressBar } from '@components/index';
+import { Container, Header, HeaderTitle, EmptyView } from '../styles/SignUp.styles';
+import { useNavigation } from '@react-navigation/native';
+
 import { SelectProfile } from './SelectProfile';
 import { SelectPersonalInfo } from './SelectPersonalInfo';
-import { SelectGenderAndBirthday } from './SelectGenderAndBirthday';
+import { SelectGenderAndBirthdate } from './SelectGenderAndBirthdate';
 import { SelectPassword } from './SelectPassword';
-import { Container, Header, HeaderTitle, EmptyView, StyledScroll } from '../styles/SignUp.styles';
-import { useNavigation } from '@react-navigation/native';
+import { RegisterGroup } from './RegisterGroup';
+import { SelectGroup } from './SelectGroup';
 
 const quantity = 5;
 
 export function SignUp() {
   const navigation = useNavigation();
-  const [title, setTitle] = useState('Cadastre-se');
   const [step, setStep] = useState(0);
   const [userType, setUserType] = useState('');
   const [personalInfoData, setPersonalInfoData] = useState<SelectPersonalInfoReturnData>({
@@ -20,15 +22,37 @@ export function SignUp() {
     phone: '',
     image: '',
   });
-  const [genderAndBirthday, setGenderAndBirthday] = useState<SelectGenderAndBirthdayReturnData>({
+  const [genderAndBirthdate, setGenderAndBirthdate] = useState<SelectGenderAndBirthdateReturnData>({
     gender: 'male',
-    birthday: '',
+    birthdate: '',
   });
 
   const [passwordsData, setPasswordsData] = useState<SelectPasswordReturnData>({
     password: '',
     confirmedPassword: '',
   });
+  const [group, setGroup] = useState<RegisterGroupReturnData>({
+    groupName: '',
+    athletesQuantity: 0,
+    groupImage: '',
+  });
+  const [selectedGroup, setSelectedGroup] = useState('');
+
+  const title = useMemo(() => {
+    const isFourthStep = step === 4;
+
+    const isAdvisorRegisterGroupStep = isFourthStep && userType === 'advisor';
+    if (isAdvisorRegisterGroupStep) {
+      return 'Cadastre o seu grupo';
+    }
+
+    const isAthleteRegisterGroupStep = isFourthStep && userType !== 'advisor';
+    if (isAthleteRegisterGroupStep) {
+      return 'Qual o seu grupo de corrida?';
+    }
+
+    return 'Cadastre-se';
+  }, [step, userType]);
 
   const toPreviousStep = () => {
     if (step > 0) {
@@ -64,10 +88,10 @@ export function SignUp() {
         );
       case 2:
         return (
-          <SelectGenderAndBirthday
-            data={genderAndBirthday}
+          <SelectGenderAndBirthdate
+            data={genderAndBirthdate}
             onPress={data => {
-              setGenderAndBirthday(data);
+              setGenderAndBirthdate(data);
               toNextStep();
             }}
           />
@@ -79,6 +103,28 @@ export function SignUp() {
             onPress={data => {
               setPasswordsData(data);
               toNextStep();
+            }}
+          />
+        );
+      case 4:
+        const isAdvisor = userType === 'advisor';
+        if (isAdvisor) {
+          return (
+            <RegisterGroup
+              data={group}
+              onPress={data => {
+                setGroup(data);
+                toNextStep();
+              }}
+            />
+          );
+        }
+        return (
+          <SelectGroup
+            groupId={selectedGroup}
+            onPress={data => {
+              setSelectedGroup(data);
+              // toNextStep();
             }}
           />
         );
@@ -103,7 +149,7 @@ export function SignUp() {
       </Header>
 
       <ProgressBar quantity={quantity} activeBar={step} />
-      <StyledScroll>{renderStep()}</StyledScroll>
+      {renderStep()}
     </Container>
   );
 }
