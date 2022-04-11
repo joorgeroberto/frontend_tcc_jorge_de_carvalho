@@ -7,6 +7,19 @@ import { Home, Initial, Login, SignUp } from '@screens/index';
 
 const Stack = createStackNavigator();
 
+type AppRootParamList = {
+  Home: undefined;
+  Initial: undefined;
+  Login: undefined;
+  SignUp: undefined;
+};
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends AppRootParamList {}
+  }
+}
+
 function Routes() {
   return (
     <NavigationContainer ref={navigationRef}>
