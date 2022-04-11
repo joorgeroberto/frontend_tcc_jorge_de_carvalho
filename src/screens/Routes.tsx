@@ -1,13 +1,15 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { navigationRef } from './RootNavigation';
+
 import { Home, Initial, Login, SignUp } from '@screens/index';
 
 const Stack = createStackNavigator();
 
 function Routes() {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         initialRouteName="Initial"
         screenOptions={{

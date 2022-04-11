@@ -18,7 +18,6 @@ import {
   InputWithLabel,
 } from '../styles/Login.styles';
 import { useNavigation } from '@react-navigation/native';
-import { Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@storeData/index';
 import { LoginActions } from '@storeData/actions/Login';

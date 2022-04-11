@@ -1,7 +1,8 @@
 import Api from '@config/Api';
-import { makeAthlete } from '@storeData/reducers/LoginReducer';
 import { Alert } from 'react-native';
+import * as navigation from '@screens/RootNavigation';
 import { LOGIN, LOGIN_FAIL, LOGIN_SUCCESS } from './types';
+import { useNavigation } from '@react-navigation/native';
 
 interface LoginData {
   email: string;
@@ -35,7 +36,7 @@ export const LoginActions = {
         if (problemExists) {
           return handleLoginError();
         }
-        // navigation.navigate('Home');
+        navigation.navigate('Home');
         dispatch({
           type: LOGIN_SUCCESS,
           payload: response.data,
