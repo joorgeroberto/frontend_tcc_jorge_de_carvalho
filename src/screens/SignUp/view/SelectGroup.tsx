@@ -15,7 +15,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 interface Props {
-  groupId: string;
+  group_id: string;
   onPress: (data: string) => void;
 }
 
@@ -95,19 +95,19 @@ const groupList: Array<Group> = [
   },
 ];
 
-export function SelectGroup({ groupId, onPress }: Props) {
+export function SelectGroup({ group_id, onPress }: Props) {
   const validationSchema = yup.object().shape({
-    groupId: yup.string().required('Selecione um grupo.'),
+    group_id: yup.string().required('Selecione um grupo.'),
   });
 
   const { control, handleSubmit } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      groupId,
+      group_id,
     },
   });
 
-  const onSubmit = (info: any) => onPress(info);
+  const onSubmit = (info: any) => onPress(info.group_id);
 
   const renderGroup = ({ item, onChange, selectedGroupId }: RenderGroupProps) => {
     const isSelected = item.id === selectedGroupId;
@@ -127,7 +127,7 @@ export function SelectGroup({ groupId, onPress }: Props) {
       <Container>
         <Controller
           control={control}
-          name={'groupId'}
+          name={'group_id'}
           render={({ field: { onChange, value } }) => {
             return (
               <GroupsList

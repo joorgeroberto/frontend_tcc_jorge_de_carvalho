@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Container, Input, Button } from '../styles/SelectPersonalInfo.styles';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -12,7 +12,10 @@ interface Props {
 
 const maxPhoneLength = 15;
 
-export function SelectPersonalInfo({ data: { name, email, phone, image }, onPress }: Props) {
+export function SelectPersonalInfo({
+  data: { name, email, phone, athlete_image },
+  onPress,
+}: Props) {
   const validationSchema = yup.object().shape({
     name: yup.string().required('O nome não pode ser vazio.').min(3, 'Digite um nome válido'),
     email: yup.string().required('O email não pode ser vazio.').email('Digite um email válido.'),
@@ -20,7 +23,9 @@ export function SelectPersonalInfo({ data: { name, email, phone, image }, onPres
       .string()
       .required('O telefone não pode ser vazio.')
       .length(maxPhoneLength, 'Digite um telefone válido.'),
-    image: yup.string().required('Por favor, clique no círculo acima e selecione uma imagem.'),
+    athlete_image: yup
+      .string()
+      .required('Por favor, clique no círculo acima e selecione uma imagem.'),
   });
 
   const { control, handleSubmit } = useForm({
@@ -29,7 +34,7 @@ export function SelectPersonalInfo({ data: { name, email, phone, image }, onPres
       name,
       email,
       phone,
-      image,
+      athlete_image,
     },
   });
 
@@ -37,7 +42,7 @@ export function SelectPersonalInfo({ data: { name, email, phone, image }, onPres
 
   return (
     <Container>
-      <ImageSelector name={'image'} control={control} />
+      <ImageSelector name={'athlete_image'} control={control} />
 
       <Input
         name={'name'}

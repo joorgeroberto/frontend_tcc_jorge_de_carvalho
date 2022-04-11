@@ -15,44 +15,38 @@ const quantity = 5;
 export function SignUp() {
   const navigation = useNavigation();
   const [step, setStep] = useState(0);
-  const [userType, setUserType] = useState('');
-  const [personalInfoData, setPersonalInfoData] = useState<SelectPersonalInfoReturnData>({
+
+  const [signUpData, setSignUpData] = useState<SignUpData>({
     name: '',
+    user_type: 'athlete',
+    password: '',
+    athlete_image: '',
     email: '',
     phone: '',
-    image: '',
-  });
-  const [genderAndBirthdate, setGenderAndBirthdate] = useState<SelectGenderAndBirthdateReturnData>({
-    gender: 'male',
     birthdate: '',
+    gender: 'male',
+    group_id: '',
+    group_name: '',
+    athletes_quantity: 0,
+    group_image: '',
   });
-
-  const [passwordsData, setPasswordsData] = useState<SelectPasswordReturnData>({
-    password: '',
-    confirmedPassword: '',
-  });
-  const [group, setGroup] = useState<RegisterGroupReturnData>({
-    groupName: '',
-    athletesQuantity: 0,
-    groupImage: '',
-  });
-  const [selectedGroup, setSelectedGroup] = useState('');
 
   const title = useMemo(() => {
     const isFourthStep = step === 4;
+    const user_type = signUpData?.user_type;
 
-    const isAdvisorRegisterGroupStep = isFourthStep && userType === 'advisor';
+    const isAdvisorRegisterGroupStep = isFourthStep && user_type === 'advisor';
     if (isAdvisorRegisterGroupStep) {
       return 'Cadastre o seu grupo';
     }
 
-    const isAthleteRegisterGroupStep = isFourthStep && userType !== 'advisor';
+    const isAthleteRegisterGroupStep = isFourthStep && user_type !== 'advisor';
     if (isAthleteRegisterGroupStep) {
       return 'Qual o seu grupo de corrida?';
     }
 
     return 'Cadastre-se';
-  }, [step, userType]);
+  }, [step, signUpData]);
 
   const toPreviousStep = () => {
     if (step > 0) {
@@ -62,80 +56,67 @@ export function SignUp() {
   };
 
   const toNextStep = () => {
-    setStep(step + 1);
+    if (step < 4) {
+      return setStep(step + 1);
+    }
+  };
+
+  const handleOnPressNext = (data: SignUpData) => {
+    let signUpDataTemp = { ...signUpData };
+    Object.keys(data).forEach(key => {
+      signUpDataTemp[key as keyof SignUpData] = data[key as keyof SignUpData] as never;
+    });
+
+    setSignUpData(signUpDataTemp);
+    toNextStep();
   };
 
   const renderStep = () => {
     switch (step) {
       case 0:
         return (
-          <SelectProfile
-            onPress={type => {
-              setUserType(type);
-              toNextStep();
-            }}
-          />
+          <SelectProfile onPress={type => handleOnPressNext({ user_type: type } as SignUpData)} />
         );
       case 1:
         return (
           <SelectPersonalInfo
-            data={personalInfoData}
-            onPress={data => {
-              setPersonalInfoData(data);
-              toNextStep();
-            }}
+            data={signUpData as SelectPersonalInfoReturnData}
+            onPress={data => handleOnPressNext(data as SignUpData)}
           />
         );
       case 2:
         return (
           <SelectGenderAndBirthdate
-            data={genderAndBirthdate}
-            onPress={data => {
-              setGenderAndBirthdate(data);
-              toNextStep();
-            }}
+            data={signUpData as SelectGenderAndBirthdateReturnData}
+            onPress={data => handleOnPressNext(data as SignUpData)}
           />
         );
       case 3:
         return (
           <SelectPassword
-            data={passwordsData}
-            onPress={data => {
-              setPasswordsData(data);
-              toNextStep();
-            }}
+            data={signUpData as SelectPasswordReturnData}
+            onPress={data => handleOnPressNext(data as SignUpData)}
           />
         );
       case 4:
-        const isAdvisor = userType === 'advisor';
+        const isAdvisor = signUpData?.user_type === 'advisor';
         if (isAdvisor) {
           return (
             <RegisterGroup
-              data={group}
-              onPress={data => {
-                setGroup(data);
-                toNextStep();
-              }}
+              data={signUpData as RegisterGroupReturnData}
+              onPress={data => handleOnPressNext(data as SignUpData)}
             />
           );
         }
         return (
           <SelectGroup
-            groupId={selectedGroup}
-            onPress={data => {
-              setSelectedGroup(data);
-              // toNextStep();
-            }}
+            group_id={signUpData.group_id}
+            onPress={data => handleOnPressNext({ group_id: data } as SignUpData)}
           />
         );
       default:
         return (
-          <SelectProfile
-            onPress={type => {
-              setUserType(type);
-              toNextStep();
-            }}
-          />
+          <SelectProfile onPress={type => handleOnPressNext({ user_type: type } as SignUpData)} />
         );
     }
   };

@@ -16,7 +16,6 @@ interface RenderTabProps {
 const genderOptions: Array<Gender> = [
   { type: 'male', name: 'Masculino' },
   { type: 'female', name: 'Feminino' },
-  { type: 'other', name: 'Outro' },
 ];
 
 export function GenderTabs({ control }: GenderTabsProps) {
@@ -24,10 +23,13 @@ export function GenderTabs({ control }: GenderTabsProps) {
     const isSelected = genderOptions[index].type === selectedTab;
     return (
       <Tab
+        key={index}
         isSelected={isSelected}
         tabsQuantity={genderOptions.length}
         onPress={() => onPress(genderOptions[index].type)}>
-        <TabLabel isSelected={isSelected}>{genderOptions[index].name}</TabLabel>
+        <TabLabel key={index} isSelected={isSelected}>
+          {genderOptions[index].name}
+        </TabLabel>
       </Tab>
     );
   }, []);

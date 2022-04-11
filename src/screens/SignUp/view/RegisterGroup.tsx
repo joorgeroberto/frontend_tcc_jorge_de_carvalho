@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Container,
   Button as StyledButton,
@@ -16,16 +16,18 @@ interface Props {
 }
 
 export function RegisterGroup({
-  data: { groupName, athletesQuantity, groupImage },
+  data: { group_name, athletes_quantity, group_image },
   onPress,
 }: Props) {
   const validationSchema = yup.object().shape({
-    groupName: yup
+    group_name: yup
       .string()
       .required('O nome do grupo não pode ser vazio.')
       .min(3, 'O nome do grupo deve conter pelo menos 3 letras.'),
-    groupImage: yup.string().required('Por favor, clique no círculo acima e selecione uma imagem.'),
-    athletesQuantity: yup
+    group_image: yup
+      .string()
+      .required('Por favor, clique no círculo acima e selecione uma imagem.'),
+    athletes_quantity: yup
       .number()
       .typeError('A quantidade de atletas deve ser válida e maior que zero.')
       .required('A quantidade de atletas deve ser válida e maior que zero.')
@@ -35,9 +37,9 @@ export function RegisterGroup({
   const { control, handleSubmit } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      groupName,
-      athletesQuantity,
-      groupImage,
+      group_name,
+      athletes_quantity,
+      group_image,
     },
   });
 
@@ -45,12 +47,12 @@ export function RegisterGroup({
 
   return (
     <Container>
-      <ImageSelector name={'groupImage'} control={control} />
+      <ImageSelector name={'group_image'} control={control} />
 
       <InputsContainer>
         <Input
           autoCapitalize={'sentences'}
-          name={'groupName'}
+          name={'group_name'}
           control={control}
           label={'Nome do grupo:'}
           marginBottom={15}
@@ -58,7 +60,7 @@ export function RegisterGroup({
         />
 
         <Input
-          name={'athletesQuantity'}
+          name={'athletes_quantity'}
           control={control}
           label={'Quantidade de atletas:'}
           placeholder={'Digite a quantidade de atletas'}

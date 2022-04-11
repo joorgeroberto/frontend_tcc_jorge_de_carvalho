@@ -9,7 +9,7 @@ import {
 } from '../styles/SelectProfile.styles';
 
 interface Props {
-  onPress: (userType: string) => void;
+  onPress: (userType: 'advisor' | 'monitor' | 'athlete') => void;
 }
 
 export function SelectProfile({ onPress }: Props) {
