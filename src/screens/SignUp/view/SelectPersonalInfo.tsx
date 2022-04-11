@@ -41,6 +41,7 @@ export function SelectPersonalInfo({ data: { name, email, phone, image }, onPres
 
       <Input
         name={'name'}
+        autoCapitalize={'words'}
         control={control}
         label={'Nome:'}
         marginBottom={15}

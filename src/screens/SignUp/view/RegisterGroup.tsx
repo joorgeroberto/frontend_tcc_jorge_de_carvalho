@@ -49,6 +49,7 @@ export function RegisterGroup({
 
       <InputsContainer>
         <Input
+          autoCapitalize={'sentences'}
           name={'groupName'}
           control={control}
           label={'Nome do grupo:'}
