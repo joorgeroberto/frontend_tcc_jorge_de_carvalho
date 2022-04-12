@@ -18,10 +18,19 @@ import {
   InputWithLabel,
 } from '../styles/Login.styles';
 import { useNavigation } from '@react-navigation/native';
-import { Alert } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@storeData/index';
+import { LoginActions } from '@storeData/actions/Login';
+
+interface OnSubmitProps {
+  email: string;
+  password: string;
+}
 
 export function Login() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { loading } = useSelector(({ login }: RootState) => login);
 
   const validationSchema = yup.object().shape({
     email: yup.string().required('O email não pode ser vazio.').email('Digite um email válido.'),
@@ -39,7 +48,10 @@ export function Login() {
     },
   });
 
-  const onSubmit = (data: any) => Alert.alert(data.email, data.password);
+  const onSubmit = ({ email, password }: OnSubmitProps) => {
+    dispatch(LoginActions.Login({ email, password }));
+    // return Alert.alert(email, password);
+  };
 
   return (
     <Container>
@@ -68,7 +80,7 @@ export function Login() {
       </InputsContainer>
 
       <BottomContainer>
-        <LoginButton label="Login" onPress={handleSubmit(onSubmit)} />
+        <LoginButton label="Login" onPress={handleSubmit(onSubmit)} loading={loading} />
         <SignUpTextContainer>
           <SignUpText>É um novo usuário?</SignUpText>
           <SignUpButton onPress={() => navigation.navigate('SignUp')}>

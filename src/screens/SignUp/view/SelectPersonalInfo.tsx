@@ -1,16 +1,9 @@
-import React, { useState } from 'react';
-import {
-  Container,
-  Input,
-  ImageContainer,
-  Button,
-  Image,
-  StyledTextError,
-} from '../styles/SelectPersonalInfo.styles';
-import { useForm, Controller } from 'react-hook-form';
+import React from 'react';
+import { Container, Input, Button } from '../styles/SelectPersonalInfo.styles';
+import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { ImageSelector } from '@components/ImageSelector';
 
 interface Props {
   data: SelectPersonalInfoReturnData;
@@ -19,7 +12,10 @@ interface Props {
 
 const maxPhoneLength = 15;
 
-export function SelectPersonalInfo({ data: { name, email, phone, image }, onPress }: Props) {
+export function SelectPersonalInfo({
+  data: { name, email, phone, athlete_image },
+  onPress,
+}: Props) {
   const validationSchema = yup.object().shape({
     name: yup.string().required('O nome não pode ser vazio.').min(3, 'Digite um nome válido'),
     email: yup.string().required('O email não pode ser vazio.').email('Digite um email válido.'),
@@ -27,7 +23,9 @@ export function SelectPersonalInfo({ data: { name, email, phone, image }, onPres
       .string()
       .required('O telefone não pode ser vazio.')
       .length(maxPhoneLength, 'Digite um telefone válido.'),
-    image: yup.string().required('Por favor, clique no círculo acima e selecione uma imagem.'),
+    athlete_image: yup
+      .string()
+      .required('Por favor, clique no círculo acima e selecione uma imagem.'),
   });
 
   const { control, handleSubmit } = useForm({
@@ -36,49 +34,19 @@ export function SelectPersonalInfo({ data: { name, email, phone, image }, onPres
       name,
       email,
       phone,
-      image,
+      athlete_image,
     },
   });
 
   const onSubmit = (data: any) => onPress(data);
 
-  const getImage = async () => {
-    try {
-      const { assets } = await launchImageLibrary({
-        maxWidth: 1920,
-        maxHeight: 1080,
-        selectionLimit: 1,
-        mediaType: 'photo',
-        includeBase64: false,
-        quality: 1,
-      });
-
-      const isValidImage = assets && assets?.length > 0;
-      if (isValidImage) {
-        return assets?.[0].uri as string;
-      }
-    } catch (error) {
-      return '';
-    }
-  };
-
   return (
     <Container>
-      <Controller
-        control={control}
-        name="image"
-        render={({ field: { onChange, value }, fieldState: { error } }) => {
-          return (
-            <ImageContainer onPress={async () => onChange(await getImage())}>
-              <Image source={{ uri: value }} />
-              {error && error?.message && <StyledTextError>{error?.message}</StyledTextError>}
-            </ImageContainer>
-          );
-        }}
-      />
+      <ImageSelector name={'athlete_image'} control={control} />
 
       <Input
         name={'name'}
+        autoCapitalize={'words'}
         control={control}
         label={'Nome:'}
         marginBottom={15}

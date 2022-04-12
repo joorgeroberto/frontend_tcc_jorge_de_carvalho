@@ -16,6 +16,7 @@ interface InputProps {
   placeholder?: string;
   editable?: boolean;
   keyboardType?: KeyboardTypeOptions;
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters' | undefined;
   secureTextEntry?: boolean;
   marginBottom?: number;
   mask?: ({ newValue, oldValue }: MaskProps) => string;
@@ -27,6 +28,7 @@ export function InputWithLabel({
   mask,
   control,
   editable = true,
+  autoCapitalize = 'none',
   keyboardType = 'default',
   placeholder = 'Digite o seu texto!',
   secureTextEntry = false,
@@ -41,6 +43,7 @@ export function InputWithLabel({
           <Container marginBottom={marginBottom}>
             <StyledText>{label}</StyledText>
             <StyledTextInput
+              autoCapitalize={autoCapitalize}
               editable={editable}
               keyboardType={keyboardType}
               errorExists={!!error}

@@ -1,4 +1,4 @@
-import { SET_REGISTER_NAME } from '@storeData/actions/types';
+import { SET_REGISTER_NAME } from '@storeData/actions/Register/types';
 
 interface RegisterState {
   name: string | undefined;

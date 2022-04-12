@@ -27,7 +27,3 @@ export const EmptyView = styled.View`
   width: 20px;
   height: 20px;
 `;
-
-export const StyledScroll = styled.ScrollView`
-  flex: 1;
-`;

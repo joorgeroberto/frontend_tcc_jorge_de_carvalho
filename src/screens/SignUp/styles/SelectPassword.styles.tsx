@@ -4,10 +4,9 @@ import { Button as RawButton, InputWithLabel } from '@components/index';
 import colors from '@config/colors';
 const windowWidth = Dimensions.get('window').width;
 
-export const Container = styled.View`
+export const Container = styled.ScrollView`
   flex: 1;
   width: 100%;
-  justify-content: space-between;
   background-color: white;
 `;
 
@@ -22,4 +21,17 @@ export const ImageContainer = styled.View`
 export const Image = styled.Image`
   width: ${windowWidth * 0.488}px;
   height: ${windowWidth * 0.5973}px;
+`;
+
+export const InputsContainer = styled.View`
+  flex: 1;
+`;
+
+export const Input = styled(InputWithLabel)`
+  margin-bottom: 15px;
+`;
+
+export const Button = styled(RawButton)`
+  width: 100%;
+  margin-top: 40px;
 `;

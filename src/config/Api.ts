@@ -1,6 +1,6 @@
 import { create } from 'apisauce';
 
-const BASE_URL = 'http://162.243.169.133';
+const BASE_URL = 'http://localhost:3333'; //'http://162.243.169.133';
 
 const Api = create({
   baseURL: `${BASE_URL}`,

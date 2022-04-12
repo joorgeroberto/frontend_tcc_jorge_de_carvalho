@@ -18,7 +18,7 @@ export function ProgressBar({ quantity, activeBar }: Props) {
       const isLastBar = index + 1 === quantity;
 
       return (
-        <BarContainer quantity={quantity} isLastBar={isLastBar}>
+        <BarContainer key={index} quantity={quantity} isLastBar={isLastBar}>
           <Bar key={index} quantity={quantity} isActive={isActive} isLastBar={isLastBar} />
         </BarContainer>
       );
