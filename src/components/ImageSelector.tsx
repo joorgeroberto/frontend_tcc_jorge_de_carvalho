@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 import styled from 'styled-components/native';
 import { Controller } from 'react-hook-form';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -29,7 +29,19 @@ export function ImageSelector({ name, width, height, borderRadius, control }: Pr
 
       const isValidImage = assets && assets?.length > 0;
       if (isValidImage) {
-        return assets?.[0].uri as string;
+        const image = assets?.[0];
+        const data = new FormData();
+
+        console.log('image', image);
+
+        data.append(name, {
+          name: image.fileName,
+          type: image.type,
+          uri: Platform.OS === 'ios' ? image.uri.replace('file://', '') : image.uri,
+          // uri: image.uri,
+        });
+        return data;
+        // return assets?.[0].uri as string;
       }
     } catch (error) {
       return '';
@@ -48,7 +60,7 @@ export function ImageSelector({ name, width, height, borderRadius, control }: Pr
               height={height}
               borderRadius={borderRadius}
               resizeMode="cover"
-              source={{ uri: value }}
+              source={{ uri: value.uri }}
             />
             {error && error?.message && <StyledTextError>{error?.message}</StyledTextError>}
           </ImageContainer>

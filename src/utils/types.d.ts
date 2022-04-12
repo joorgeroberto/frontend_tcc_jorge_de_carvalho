@@ -24,13 +24,13 @@ interface SignUpData
     SelectPasswordReturnData,
     RegisterGroupReturnData {
   user_type: 'athlete' | 'monitor' | 'advisor';
-  group_id: string;
+  group_id?: string;
 }
 
 interface SelectPersonalInfoReturnData {
   name: string;
   email: string;
-  athlete_image: string;
+  athlete_image: FormData;
   phone: string;
 }
 

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { BackButton, ProgressBar } from '@components/index';
 import { Container, Header, HeaderTitle, EmptyView } from '../styles/SignUp.styles';
 import { useNavigation } from '@react-navigation/native';
@@ -9,13 +9,20 @@ import { SelectGenderAndBirthdate } from './SelectGenderAndBirthdate';
 import { SelectPassword } from './SelectPassword';
 import { RegisterGroup } from './RegisterGroup';
 import { SelectGroup } from './SelectGroup';
+import { RootState } from '@storeData/index';
+import { useDispatch, useSelector } from 'react-redux';
+import { SignUpActions } from '@storeData/actions/SignUp';
 
 const quantity = 5;
 
 export function SignUp() {
   const navigation = useNavigation();
-  const [step, setStep] = useState(0);
+  const { sending_data, sending_athlete_image, sending_group_image } = useSelector(
+    ({ signUp }: RootState) => signUp,
+  );
+  const dispatch = useDispatch();
 
+  const [step, setStep] = useState(0);
   const [signUpData, setSignUpData] = useState<SignUpData>({
     name: '',
     user_type: 'athlete',
@@ -25,14 +32,14 @@ export function SignUp() {
     phone: '',
     birthdate: '',
     gender: 'male',
-    group_id: '',
     group_name: '',
     athletes_quantity: 0,
     group_image: '',
   });
 
+  const isFourthStep = useMemo(() => step >= 4, [step]);
+
   const title = useMemo(() => {
-    const isFourthStep = step === 4;
     const user_type = signUpData?.user_type;
 
     const isAdvisorRegisterGroupStep = isFourthStep && user_type === 'advisor';
@@ -46,7 +53,7 @@ export function SignUp() {
     }
 
     return 'Cadastre-se';
-  }, [step, signUpData]);
+  }, [isFourthStep, signUpData]);
 
   const toPreviousStep = () => {
     if (step > 0) {
@@ -55,11 +62,23 @@ export function SignUp() {
     return navigation.goBack();
   };
 
-  const toNextStep = () => {
-    if (step < 4) {
-      return setStep(step + 1);
+  const toNextStep = useCallback(() => {
+    if (isFourthStep) {
+      return;
     }
-  };
+    return setStep(step + 1);
+  }, [isFourthStep, step]);
+
+  const dispatchData = useCallback(
+    (data: SignUpData) => {
+      if (!isFourthStep) {
+        return;
+      }
+
+      return dispatch(SignUpActions.SignUp(data));
+    },
+    [isFourthStep, dispatch],
+  );
 
   const handleOnPressNext = (data: SignUpData) => {
     let signUpDataTemp = { ...signUpData };
@@ -69,6 +88,7 @@ export function SignUp() {
 
     setSignUpData(signUpDataTemp);
     toNextStep();
+    dispatchData(signUpDataTemp);
   };
 
   const renderStep = () => {
@@ -110,7 +130,7 @@ export function SignUp() {
         }
         return (
           <SelectGroup
-            group_id={signUpData.group_id}
+            group_id={signUpData.group_id || ''}
             onPress={data => handleOnPressNext({ group_id: data } as SignUpData)}
           />
         );
