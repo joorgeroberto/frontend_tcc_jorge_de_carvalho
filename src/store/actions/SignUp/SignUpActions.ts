@@ -7,6 +7,9 @@ import {
   SIGN_UP_FAIL,
   SIGN_UP_SENDING_ATHLETE_IMAGE,
   SIGN_UP_SENDING_GROUP_IMAGE,
+  GET_GROUP_LIST,
+  GET_GROUP_LIST_SUCCESS,
+  GET_GROUP_LIST_FAIL,
 } from './types';
 
 interface CreateFormDataProps {
@@ -42,9 +45,11 @@ const createFormData = ({ image, body = {} }: CreateFormDataProps) => {
   return data;
 };
 
+let hasError = false;
 const handleError =
   ({ message, type }: HandleErrorProps) =>
   (dispatch: any) => {
+    hasError = true;
     Alert.alert(
       'Ocorreu um erro',
       message || 'Por favor, verifique os seus dados e tente novamente',
@@ -71,7 +76,7 @@ export const SignUpActions = {
   }: SignUpData) => {
     return async (dispatch: any) => {
       dispatch({ type: SIGN_UP_SENDING_DATA });
-      let hasError = false;
+      hasError = false;
       let token = '';
 
       const isAdvisor =
@@ -113,21 +118,21 @@ export const SignUpActions = {
           });
           const problemExists = response?.problem && response?.data;
           if (problemExists) {
-            hasError = true;
-            return handleError({});
+            return dispatch(handleError({ message: response?.data.message }));
           }
           token = response.data.token;
-
           return dispatch({
             type: SIGN_UP_SUCCESS,
           });
         } catch (err) {
-          hasError = true;
-          return handleError({});
+          return dispatch(handleError({}));
         }
       }
 
       await sendData();
+      if (hasError) {
+        return;
+      }
       await dispatch(
         SignUpActions.SendImage({
           image: athlete_image as ImageData,
@@ -136,9 +141,12 @@ export const SignUpActions = {
         }),
       );
       if (!isAdvisor) {
+        navigation.navigate({ name: 'SignUpCompleted', reset: true });
         return;
       }
-      // navigation.navigate({ name: 'SignUpCompleted', reset: true });
+      if (hasError) {
+        return;
+      }
 
       await dispatch(
         SignUpActions.SendImage({
@@ -147,7 +155,8 @@ export const SignUpActions = {
           image_type: 'group',
         }),
       );
-      console.log('passoooooooou');
+
+      navigation.navigate({ name: 'SignUpCompleted', params: { isAdvisor: true }, reset: true });
     };
   },
 
@@ -157,9 +166,7 @@ export const SignUpActions = {
         type:
           image_type === 'athlete' ? SIGN_UP_SENDING_ATHLETE_IMAGE : SIGN_UP_SENDING_GROUP_IMAGE,
       });
-      let hasError = false;
-
-      console.log(`sending ${image_type} image`);
+      hasError = false;
 
       async function sendImage() {
         if (hasError) {
@@ -167,7 +174,7 @@ export const SignUpActions = {
         }
 
         try {
-          const response = await Api.patch(
+          const response: any = await Api.patch(
             image_type === 'athlete' ? '/athletes/image' : '/athletesGroup/image',
             createFormData({ image: image as ImageData }),
             {
@@ -179,10 +186,7 @@ export const SignUpActions = {
           );
           const problemExists = response?.problem && response?.data;
           if (problemExists) {
-            console.log(response);
-
-            hasError = true;
-            return handleError({});
+            return dispatch(handleError({ message: response?.data.message }));
           }
           // Se for athlete of monitor, encerrar aqui e navegar para a prox tela de cadastro concluido.
           //Se for advisor, ir para a prox função, enviar a imagem do grupo e navegar para a prox tela de cadastro concluido.
@@ -191,13 +195,40 @@ export const SignUpActions = {
             type: SIGN_UP_SUCCESS,
           });
         } catch (err) {
-          hasError = true;
-          return handleError({});
+          return dispatch(handleError({}));
         }
       }
 
       await sendImage();
-      console.log('passoooooooou');
+    };
+  },
+
+  GetGroupList: () => {
+    return async (dispatch: any) => {
+      dispatch({ type: GET_GROUP_LIST });
+      hasError = false;
+
+      try {
+        const response: any = await Api.get(
+          '/athletesGroup',
+          {},
+          {
+            headers: { 'Content-Type': 'application/json' },
+          },
+        );
+        const problemExists = response?.problem && response?.data;
+        if (problemExists) {
+          return dispatch(
+            handleError({ type: GET_GROUP_LIST_FAIL, message: response?.data.message }),
+          );
+        }
+        dispatch({
+          type: GET_GROUP_LIST_SUCCESS,
+          payload: response.data,
+        });
+      } catch (error) {
+        dispatch(handleError({ type: GET_GROUP_LIST_FAIL }));
+      }
     };
   },
 };

@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Container,
   Button as StyledButton,
   Input,
   InputsContainer,
   ImageSelector,
+  LoaderContainer,
+  LoaderText,
+  Loader,
 } from '../styles/RegisterGroup.styles';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useSelector } from 'react-redux';
+import { RootState } from '@storeData/index';
 
 interface Props {
   data: RegisterGroupReturnData;
@@ -19,6 +24,27 @@ export function RegisterGroup({
   data: { group_name, athletes_quantity, group_image },
   onPress,
 }: Props) {
+  const { sendingData, sendingAthleteImage, sendingGroupImage } = useSelector(
+    ({ signUp }: RootState) => signUp,
+  );
+
+  const isLoading = useMemo(
+    () => sendingData || sendingAthleteImage || sendingGroupImage,
+    [sendingData, sendingAthleteImage, sendingGroupImage],
+  );
+
+  const loadingText = useMemo(() => {
+    if (sendingData) {
+      return 'Enviando dados...';
+    }
+    if (sendingAthleteImage) {
+      return 'Enviando imagem do usuário...';
+    }
+    if (sendingGroupImage) {
+      return 'Enviando imagem do grupo...';
+    }
+  }, [sendingData, sendingAthleteImage, sendingGroupImage]);
+
   const validationSchema = () => {
     const imageFieldValidation = yup
       .string()
@@ -44,9 +70,6 @@ export function RegisterGroup({
         })
         .required()
         .typeError('Por favor, clique no quadrado acima e selecione uma imagem.'),
-      // group_image: yup
-      //   .string()
-      //   .required('Por favor, clique no círculo acima e selecione uma imagem.'),
     });
   };
 
@@ -60,6 +83,15 @@ export function RegisterGroup({
   });
 
   const onSubmit = (info: any) => onPress(info);
+
+  if (isLoading) {
+    return (
+      <LoaderContainer>
+        <LoaderText>{loadingText}</LoaderText>
+        <Loader />
+      </LoaderContainer>
+    );
+  }
 
   return (
     <Container>

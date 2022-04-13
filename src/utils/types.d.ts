@@ -16,7 +16,7 @@ interface SignUpData
     SelectPasswordReturnData,
     RegisterGroupReturnData {
   user_type: 'athlete' | 'monitor' | 'advisor';
-  group_id?: ImageData | string;
+  group_id?: string;
 }
 
 interface SelectPersonalInfoReturnData {
@@ -34,6 +34,11 @@ interface SelectGenderAndBirthdateReturnData {
 interface SelectPasswordReturnData {
   password: string;
   confirmedPassword?: string;
+}
+
+interface SelectGroupReturnData {
+  group_id: string;
+  group_name: string;
 }
 
 interface RegisterGroupReturnData {

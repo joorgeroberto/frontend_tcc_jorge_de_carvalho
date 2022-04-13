@@ -31,22 +31,12 @@ export function ImageSelector({ name, width, height, borderRadius, control }: Pr
       if (isValidImage) {
         const image = assets?.[0];
 
-        console.log('image', image);
-
-        // data.append(name, {
-        //   name: image.fileName,
-        //   type: image.type,
-        //   uri: Platform.OS === 'ios' ? image.uri.replace('file://', '') : image.uri,
-        //   // uri: image.uri,
-        // });
-
         return {
           multipartFormName: name,
           fileName: image.fileName,
           type: image.type,
           uri: Platform.OS === 'ios' ? image.uri.replace('file://', '') : image.uri,
         };
-        // return assets?.[0].uri as string;
       }
     } catch (error) {
       return '';

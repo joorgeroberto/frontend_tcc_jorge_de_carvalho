@@ -9,17 +9,13 @@ import { SelectGenderAndBirthdate } from './SelectGenderAndBirthdate';
 import { SelectPassword } from './SelectPassword';
 import { RegisterGroup } from './RegisterGroup';
 import { SelectGroup } from './SelectGroup';
-import { RootState } from '@storeData/index';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { SignUpActions } from '@storeData/actions/SignUp';
 
 const quantity = 5;
 
 export function SignUp() {
   const navigation = useNavigation();
-  const { sending_data, sending_athlete_image, sending_group_image } = useSelector(
-    ({ signUp }: RootState) => signUp,
-  );
   const dispatch = useDispatch();
 
   const [step, setStep] = useState(0);
@@ -86,8 +82,6 @@ export function SignUp() {
       signUpDataTemp[key as keyof SignUpData] = data[key as keyof SignUpData] as never;
     });
 
-    console.log('newData', signUpDataTemp);
-
     setSignUpData(signUpDataTemp);
     toNextStep();
     dispatchData(signUpDataTemp);
@@ -133,7 +127,10 @@ export function SignUp() {
         return (
           <SelectGroup
             group_id={signUpData.group_id || ''}
-            onPress={data => handleOnPressNext({ group_id: data } as SignUpData)}
+            group_name={signUpData.group_name || ''}
+            onPress={({ group_id, group_name }: SelectGroupReturnData) =>
+              handleOnPressNext({ group_id, group_name } as SignUpData)
+            }
           />
         );
       default:

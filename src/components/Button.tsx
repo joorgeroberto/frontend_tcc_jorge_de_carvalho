@@ -1,6 +1,11 @@
 import colors from '@config/colors';
 import React from 'react';
-import { ActivityIndicator, TouchableOpacity, ViewProps, ImageSourcePropType } from 'react-native';
+import {
+  ActivityIndicator as Loader,
+  TouchableOpacity,
+  ViewProps,
+  ImageSourcePropType,
+} from 'react-native';
 import styled from 'styled-components/native';
 
 type Props = {
@@ -33,7 +38,7 @@ export function Button(props: Props) {
     <TouchableOpacity onPress={() => (disabled ? {} : onPress())} testID="button">
       <Container disabled={disabled} width={width} height={height} {...others}>
         {loading ? (
-          <ActivityIndicator testID="button-loading" size={24} color={colors.WHITE} />
+          <Loader testID="button-loading" size={24} color={colors.WHITE} />
         ) : (
           <>
             {imageSource && <Image source={imageSource} />}
