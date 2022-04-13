@@ -22,7 +22,7 @@ export const SignUpReducer = (state: SignUpState = signUpInitialState, action: S
   switch (action.type) {
     case SIGN_UP_SENDING_DATA:
       return { ...state, sending_data: true };
-    case SIGN_UP_SENDING_DATA:
+    case SIGN_UP_SENDING_ATHLETE_IMAGE:
       return { ...state, sending_athlete_image: true };
     case SIGN_UP_SENDING_GROUP_IMAGE:
       return { ...state, sending_group_image: true };

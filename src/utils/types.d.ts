@@ -3,20 +3,12 @@ interface StandardAction {
   payload?: any;
 }
 
-// interface SignUpData {
-//   name: string;
-//   user_type: 'athlete' | 'monitor' | 'advisor';
-//   password: string;
-//   email: string;
-//   phone: string;
-//   birthdate: string;
-//   athlete_image: string;
-//   gender: 'male' | 'female';
-//   group_id: string;
-//   group_name: string;
-//   athletes_quantity: number;
-//   group_image: string;
-// }
+interface ImageData {
+  multipartFormName: string;
+  fileName: string;
+  type: string;
+  uri: string;
+}
 
 interface SignUpData
   extends SelectPersonalInfoReturnData,
@@ -24,13 +16,13 @@ interface SignUpData
     SelectPasswordReturnData,
     RegisterGroupReturnData {
   user_type: 'athlete' | 'monitor' | 'advisor';
-  group_id?: string;
+  group_id?: ImageData | string;
 }
 
 interface SelectPersonalInfoReturnData {
   name: string;
   email: string;
-  athlete_image: FormData;
+  athlete_image: ImageData | string;
   phone: string;
 }
 
@@ -47,7 +39,7 @@ interface SelectPasswordReturnData {
 interface RegisterGroupReturnData {
   group_name: string;
   athletes_quantity: number;
-  group_image: string;
+  group_image: ImageData | string;
 }
 
 interface Gender {

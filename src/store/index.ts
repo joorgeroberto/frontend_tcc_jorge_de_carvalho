@@ -7,6 +7,7 @@ const reducers = combineReducers;
 let composeEnhancers = compose;
 
 if (__DEV__) {
+  /* @ts-ignore */
   composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 }
 

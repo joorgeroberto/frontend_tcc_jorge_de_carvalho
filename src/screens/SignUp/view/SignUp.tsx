@@ -86,6 +86,8 @@ export function SignUp() {
       signUpDataTemp[key as keyof SignUpData] = data[key as keyof SignUpData] as never;
     });
 
+    console.log('newData', signUpDataTemp);
+
     setSignUpData(signUpDataTemp);
     toNextStep();
     dispatchData(signUpDataTemp);
