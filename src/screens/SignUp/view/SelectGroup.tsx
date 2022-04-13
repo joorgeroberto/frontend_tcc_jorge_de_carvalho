@@ -1,148 +1,116 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Container,
   GroupsList,
   GroupImage,
   Group,
   Button,
-  ButtonContainer,
   GroupTextContainer,
   GroupName,
   GroupAdvisor,
+  Loader,
 } from '../styles/SelectGroup.styles';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@storeData/index';
+import { SignUpActions } from '@storeData/actions/SignUp';
+import { API_BASE_URL } from '@config/Api';
 
 interface Props {
   group_id: string;
-  onPress: (data: string) => void;
+  group_name: string;
+  onPress: (data: SelectGroupReturnData) => void;
 }
 
 interface Group {
   id: string;
   name: string;
-  advisor: string;
+  advisorName: string;
   image: string;
 }
 
 interface RenderGroupProps {
   item: Group;
-  selectedGroupId: string;
-  onChange: (id: string) => void;
+  selectedGroup: SelectGroupReturnData;
+  onChange: (data: SelectGroupReturnData) => void;
 }
 
-const groupList: Array<Group> = [
-  {
-    id: '277fbb62-fc83-49e0-8a8f-b80603aec91a',
-    name: 'Clube de corrida da Ufs',
-    advisor: 'Assessor da Silva',
-    image: 'https://infonet.com.br/wp-content/uploads/2020/09/ufs_fotoascom_100920.jpg',
-  },
-  {
-    id: '277fbb62-fc83-49e0-8a8f-b80603aec91a2',
-    name: 'Clube de corrida da Ufs',
-    advisor: 'Assessor da Silva',
-    image: 'https://infonet.com.br/wp-content/uploads/2020/09/ufs_fotoascom_100920.jpg',
-  },
-  {
-    id: '277fbb62-fc83-49e0-8a8f-b80603aec91a3',
-    name: 'Clube de corrida da Ufs',
-    advisor: 'Assessor da Silva',
-    image: 'https://infonet.com.br/wp-content/uploads/2020/09/ufs_fotoascom_100920.jpg',
-  },
-  {
-    id: '277fbb62-fc83-49e0-8a8f-b80603aec91a4',
-    name: 'Clube de corrida da Ufs',
-    advisor: 'Assessor da Silva',
-    image: 'https://infonet.com.br/wp-content/uploads/2020/09/ufs_fotoascom_100920.jpg',
-  },
-  {
-    id: '277fbb62-fc83-49e0-8a8f-b80603aec91a5',
-    name: 'Clube de corrida da Ufs',
-    advisor: 'Assessor da Silva',
-    image: 'https://infonet.com.br/wp-content/uploads/2020/09/ufs_fotoascom_100920.jpg',
-  },
-  {
-    id: '277fbb62-fc83-49e0-8a8f-b80603aec91a6',
-    name: 'Clube de corrida da Ufs',
-    advisor: 'Assessor da Silva',
-    image: 'https://infonet.com.br/wp-content/uploads/2020/09/ufs_fotoascom_100920.jpg',
-  },
-  {
-    id: '277fbb62-fc83-49e0-8a8f-b80603aec91a7',
-    name: 'Clube de corrida da Ufs',
-    advisor: 'Assessor da Silva',
-    image: 'https://infonet.com.br/wp-content/uploads/2020/09/ufs_fotoascom_100920.jpg',
-  },
-  {
-    id: '277fbb62-fc83-49e0-8a8f-b80603aec91a8',
-    name: 'Clube de corrida da Ufs',
-    advisor: 'Assessor da Silva',
-    image: 'https://infonet.com.br/wp-content/uploads/2020/09/ufs_fotoascom_100920.jpg',
-  },
-  {
-    id: '277fbb62-fc83-49e0-8a8f-b80603aec91a9',
-    name: 'Clube de corrida da Ufs',
-    advisor: 'Assessor da Silva',
-    image: 'https://infonet.com.br/wp-content/uploads/2020/09/ufs_fotoascom_100920.jpg',
-  },
-  {
-    id: '277fbb62-fc83-49e0-8a8f-b80603aec91a10',
-    name: 'Clube de corrida da Ufs',
-    advisor: 'Assessor da Silva',
-    image: 'https://infonet.com.br/wp-content/uploads/2020/09/ufs_fotoascom_100920.jpg',
-  },
-];
+export function SelectGroup({ group_id, group_name, onPress }: Props) {
+  const { groupList, loading } = useSelector(({ signUp }: RootState) => signUp);
+  const dispatch = useDispatch();
 
-export function SelectGroup({ group_id, onPress }: Props) {
   const validationSchema = yup.object().shape({
-    group_id: yup.string().required('Selecione um grupo.'),
+    group: yup.object().shape({
+      group_id: yup.string().required('Selecione um grupo.'),
+      group_name: yup.string().required('Selecione um grupo.'),
+    }),
   });
 
   const { control, handleSubmit } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      group_id,
+      group: {
+        group_id,
+        group_name,
+      },
     },
   });
 
-  const onSubmit = (info: any) => onPress(info.group_id);
+  useEffect(() => {
+    dispatch(SignUpActions.GetGroupList());
+  }, [dispatch]);
 
-  const renderGroup = ({ item, onChange, selectedGroupId }: RenderGroupProps) => {
-    const isSelected = item.id === selectedGroupId;
+  const onSubmit = (info: SelectGroupReturnData) => onPress(info);
+  const renderGroup = ({ item, onChange, selectedGroup }: RenderGroupProps) => {
+    const isSelected = item.id === selectedGroup?.group_id;
+
     return (
-      <Group isSelected={isSelected} onPress={() => onChange(item.id)}>
-        <GroupImage source={{ uri: item.image }} />
+      <Group
+        isSelected={isSelected}
+        onPress={() => onChange({ group_id: item.id, group_name: item.name })}>
+        <GroupImage source={{ uri: `${API_BASE_URL}/files/${item.image}` }} />
         <GroupTextContainer>
           <GroupName>{item.name}</GroupName>
-          <GroupAdvisor>{item.advisor}</GroupAdvisor>
+          <GroupAdvisor>{item.advisorName}</GroupAdvisor>
         </GroupTextContainer>
       </Group>
     );
   };
+
+  if (loading) {
+    return (
+      <Container>
+        <Loader />
+      </Container>
+    );
+  }
 
   return (
     <>
       <Container>
         <Controller
           control={control}
-          name={'group_id'}
-          render={({ field: { onChange, value } }) => {
-            return (
-              <GroupsList
-                nestedScrollEnabled
-                data={groupList}
-                renderItem={({ item }) => {
-                  const parsedItem: Group = item as Group;
-                  return renderGroup({ item: parsedItem, onChange, selectedGroupId: value });
-                }}
-              />
-            );
-          }}
+          name={'group'}
+          render={({ field: { onChange, value } }) => (
+            <GroupsList
+              nestedScrollEnabled
+              data={groupList}
+              renderItem={({ item }) => {
+                const parsedItem: Group = item as Group;
+                return renderGroup({
+                  item: parsedItem,
+                  onChange,
+                  selectedGroup: value,
+                });
+              }}
+            />
+          )}
         />
       </Container>
-      <Button label={'Cadastre-se'} onPress={handleSubmit(onSubmit)} />
+      {/* <Button label={'Cadastre-se'} onPress={handleSubmit(onSubmit)} /> */}
+      <Button label={'Cadastre-se'} onPress={handleSubmit(({ group }) => onSubmit(group))} />
     </>
   );
 }

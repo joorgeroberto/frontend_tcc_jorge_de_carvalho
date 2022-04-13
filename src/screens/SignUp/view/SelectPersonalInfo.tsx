@@ -16,20 +16,33 @@ export function SelectPersonalInfo({
   data: { name, email, phone, athlete_image },
   onPress,
 }: Props) {
-  const validationSchema = yup.object().shape({
-    name: yup.string().required('O nome não pode ser vazio.').min(3, 'Digite um nome válido'),
-    email: yup.string().required('O email não pode ser vazio.').email('Digite um email válido.'),
-    phone: yup
+  const validationSchema = () => {
+    const imageFieldValidation = yup
       .string()
-      .required('O telefone não pode ser vazio.')
-      .length(maxPhoneLength, 'Digite um telefone válido.'),
-    athlete_image: yup
-      .string()
-      .required('Por favor, clique no círculo acima e selecione uma imagem.'),
-  });
+      .required('Por favor, clique no círculo acima e selecione uma imagem.')
+      .min(3, 'Por favor, clique no círculo acima e selecione uma imagem.');
+    return yup.object().shape({
+      name: yup.string().required('O nome não pode ser vazio.').min(3, 'Digite um nome válido'),
+      email: yup.string().required('O email não pode ser vazio.').email('Digite um email válido.'),
+      phone: yup
+        .string()
+        .required('O telefone não pode ser vazio.')
+        .length(maxPhoneLength, 'Digite um telefone válido.'),
+      athlete_image: yup
+        .object()
+        .shape({
+          multipartFormName: imageFieldValidation,
+          fileName: imageFieldValidation,
+          type: imageFieldValidation,
+          uri: imageFieldValidation,
+        })
+        .required()
+        .typeError('Por favor, clique no círculo acima e selecione uma imagem.'),
+    });
+  };
 
   const { control, handleSubmit } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema()),
     defaultValues: {
       name,
       email,

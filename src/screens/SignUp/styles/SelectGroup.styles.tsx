@@ -64,3 +64,11 @@ export const Button = styled(RawButton)`
   width: 100%;
   margin-top: 10px;
 `;
+
+export const Loader = styled.ActivityIndicator.attrs({
+  size: 50,
+  color: colors.PRIMARY,
+})`
+  flex: 1;
+  align-self: center;
+`;

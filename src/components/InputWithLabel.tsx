@@ -49,6 +49,7 @@ export function InputWithLabel({
               errorExists={!!error}
               value={value}
               placeholder={placeholder}
+              placeholderTextColor={colors.GRAYPLACEHOLDER}
               secureTextEntry={secureTextEntry}
               onChangeText={text => {
                 if (mask) {

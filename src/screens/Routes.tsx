@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { navigationRef } from './RootNavigation';
 
-import { Home, Initial, Login, SignUp } from '@screens/index';
+import { Home, Initial, Login, SignUp, SignUpCompleted } from '@screens/index';
 
 const Stack = createStackNavigator();
 
@@ -12,6 +12,7 @@ type AppRootParamList = {
   Initial: undefined;
   Login: undefined;
   SignUp: undefined;
+  SignUpCompleted: { isAdvisor: boolean };
 };
 
 declare global {
@@ -32,6 +33,7 @@ function Routes() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="SignUpCompleted" component={SignUpCompleted} />
       </Stack.Navigator>
     </NavigationContainer>
   );
