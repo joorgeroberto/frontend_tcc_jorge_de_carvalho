@@ -1,5 +1,6 @@
 import Api from '@config/Api';
-import { Alert, Platform } from 'react-native';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as navigation from '@screens/RootNavigation';
 import {
   SIGN_UP_SENDING_DATA,
@@ -121,6 +122,15 @@ export const SignUpActions = {
             return dispatch(handleError({ message: response?.data.message }));
           }
           token = response.data.token;
+          try {
+            await AsyncStorage.setItem('token', token);
+          } catch (e) {
+            dispatch(
+              handleError({
+                message: 'Erro ao salvar o token. Por favor, tente novamente mais tarde.',
+              }),
+            );
+          }
           return dispatch({
             type: SIGN_UP_SUCCESS,
           });

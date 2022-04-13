@@ -62,11 +62,7 @@ export function SelectGroup({ group_id, group_name, onPress }: Props) {
     dispatch(SignUpActions.GetGroupList());
   }, [dispatch]);
 
-  const onSubmit = (info: SelectGroupReturnData) => {
-    console.log(info);
-    return onPress(info);
-  };
-
+  const onSubmit = (info: SelectGroupReturnData) => onPress(info);
   const renderGroup = ({ item, onChange, selectedGroup }: RenderGroupProps) => {
     const isSelected = item.id === selectedGroup?.group_id;
 
