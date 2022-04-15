@@ -6,5 +6,6 @@
     android:height="300dp" 
     android:drawable="@drawable/icon"
     android:gravity="center"
+    android:scaleType="fitCenter"
   />
 </layer-list>
