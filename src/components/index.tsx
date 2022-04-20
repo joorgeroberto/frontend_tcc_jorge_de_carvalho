@@ -3,3 +3,4 @@ export * from './BackButton';
 export * from './InputWithLabel';
 export * from './ProgressBar';
 export * from './ImageSelector';
+export * from './Header';
