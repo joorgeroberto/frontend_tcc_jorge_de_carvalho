@@ -7,3 +7,9 @@ export const Container = styled.View`
   /* justify-content: center; */
   background-color: ${colors.WHITE};
 `;
+
+export const StyledFlatList = styled.FlatList`
+  flex: 1;
+  width: 100%;
+  background-color: ${colors.WHITE};
+`;
