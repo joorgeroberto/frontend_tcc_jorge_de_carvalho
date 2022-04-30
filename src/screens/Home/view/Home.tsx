@@ -1,20 +1,15 @@
-import React, { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Container } from '../styles/Home.styles';
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { Container, Button } from '../styles/Home.styles';
 
 export function Home() {
-  useEffect(() => {
-    const getToken = async () => {
-      try {
-        const value = await AsyncStorage.getItem('token');
-        if (value !== null) {
-          console.log(value);
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    getToken();
-  }, []);
-  return <Container />;
+  const navigation = useNavigation();
+  return (
+    <Container>
+      <Button
+        label="Cadastrar planejamento"
+        onPress={() => navigation.navigate('SelectAthlete', { calledFrom: 'Home' })}
+      />
+    </Container>
+  );
 }

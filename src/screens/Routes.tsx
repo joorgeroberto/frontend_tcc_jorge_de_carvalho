@@ -3,7 +3,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { navigationRef } from './RootNavigation';
 
-import { Home, Initial, Login, SignUp, SignUpCompleted, SelectAthlete } from '@screens/index';
+import {
+  Home,
+  Initial,
+  Login,
+  SignUp,
+  SignUpCompleted,
+  SelectAthlete,
+  CreatePlanning,
+} from '@screens/index';
 
 const Stack = createStackNavigator();
 
@@ -13,7 +21,8 @@ type AppRootParamList = {
   Login: undefined;
   SignUp: undefined;
   SignUpCompleted: { isAdvisor: boolean };
-  SelectAthlete: undefined;
+  SelectAthlete: { calledFrom?: string };
+  CreatePlanning: { athlete: AthleteData };
 };
 
 declare global {
@@ -36,7 +45,7 @@ function Routes() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="SignUpCompleted" component={SignUpCompleted} />
-        {/* <Stack.Screen name="SelectAthlete" component={SelectAthlete} /> */}
+        <Stack.Screen name="CreatePlanning" component={CreatePlanning} />
       </Stack.Navigator>
     </NavigationContainer>
   );

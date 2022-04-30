@@ -8,9 +8,17 @@ import { formatDate } from '@utils/utils';
 
 interface Props {
   control: any;
+  name?: string;
+  label?: string;
+  placeholder?: string;
 }
 
-export function DateSelector({ control }: Props) {
+export function DateSelector({
+  control,
+  name = 'birthdate',
+  label = 'Data de Nascimento:',
+  placeholder = 'Selecione a sua data de nascimento.',
+}: Props) {
   const [open, setOpen] = useState(false);
 
   const hasSavedDate = useCallback((value: string) => (value && value.length > 0) as boolean, []);
@@ -20,17 +28,17 @@ export function DateSelector({ control }: Props) {
       if (hasSavedDate(value)) {
         return formatDate(value);
       }
-      return 'Selecione a sua data de nascimento.';
+      return placeholder;
     },
-    [hasSavedDate],
+    [hasSavedDate, placeholder],
   );
 
   return (
     <Container>
-      <Label>Data de Nascimento:</Label>
+      <Label>{label}</Label>
       <Controller
         control={control}
-        name="birthdate"
+        name={name}
         render={({ field: { onChange, value }, fieldState: { error } }) => {
           return (
             <>

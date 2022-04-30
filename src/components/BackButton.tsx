@@ -12,7 +12,7 @@ export function BackButton(props: Props) {
   const { onPress, width = 40, height = 40 } = props;
 
   return (
-    <Container onPress={onPress} testID="button" width={width} height={height}>
+    <Container onPress={onPress} testID="back-button" width={width} height={height}>
       <Image
         width={width}
         height={height}

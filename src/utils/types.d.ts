@@ -51,3 +51,9 @@ interface Gender {
   type: 'male' | 'female';
   name: 'Masculino' | 'Feminino';
 }
+
+interface AthleteData {
+  id: string;
+  name: string;
+  image?: string;
+}

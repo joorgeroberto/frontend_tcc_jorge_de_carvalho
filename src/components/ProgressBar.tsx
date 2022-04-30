@@ -1,17 +1,21 @@
 import colors from '@config/colors';
 import React, { useCallback } from 'react';
+import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
+const windowWidth = Dimensions.get('window').width;
 
 interface Props {
   quantity: number;
   activeBar: number;
+  marginLeft?: number;
+  marginRight?: number;
 }
 
 interface RenderBarProps {
   index: number;
 }
 
-export function ProgressBar({ quantity, activeBar }: Props) {
+export function ProgressBar({ quantity, activeBar, marginLeft = 0, marginRight = 0 }: Props) {
   const renderBar = useCallback(
     ({ index }: RenderBarProps) => {
       const isActive = index <= activeBar;
@@ -27,7 +31,7 @@ export function ProgressBar({ quantity, activeBar }: Props) {
   );
 
   return (
-    <Container>
+    <Container marginLeft={marginLeft} marginRight={marginRight}>
       {Array.from(Array(quantity).keys()).map(index => {
         return renderBar({ index });
       })}
@@ -35,12 +39,19 @@ export function ProgressBar({ quantity, activeBar }: Props) {
   );
 }
 
-const Container = styled.View`
+interface ContainerProps {
+  marginLeft: number;
+  marginRight: number;
+}
+
+const Container = styled.View<ContainerProps>`
   flex-direction: row;
-  width: 100%;
+  width: ${({ marginLeft, marginRight }) => windowWidth - marginLeft - marginRight}px;
   max-width: 100%;
   height: 5px;
   margin-top: 25px;
+  margin-left: ${({ marginLeft }) => marginLeft}px;
+  margin-right: ${({ marginRight }) => marginRight}px;
   background-color: ${colors.WHITE};
 `;
 

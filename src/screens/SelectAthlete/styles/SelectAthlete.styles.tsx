@@ -11,5 +11,6 @@ export const Container = styled.View`
 export const StyledFlatList = styled.FlatList`
   flex: 1;
   width: 100%;
+  padding-top: 15px;
   background-color: ${colors.WHITE};
 `;

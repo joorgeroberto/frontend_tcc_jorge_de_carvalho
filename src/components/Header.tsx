@@ -8,11 +8,13 @@ const windowWidth = Dimensions.get('window').width;
 interface Props {
   onPressBackButton: () => void;
   title: string;
+  marginLeft?: number;
+  marginRight?: number;
 }
 
-export function Header({ title, onPressBackButton }: Props) {
+export function Header({ title, onPressBackButton, marginLeft, marginRight }: Props) {
   return (
-    <Container>
+    <Container marginLeft={marginLeft} marginRight={marginRight}>
       <BackButton onPress={onPressBackButton} />
       <Title>{title}</Title>
       <EmptyView />
@@ -20,7 +22,12 @@ export function Header({ title, onPressBackButton }: Props) {
   );
 }
 
-const Container = styled.View`
+interface ContainerProps {
+  marginLeft?: number;
+  marginRight?: number;
+}
+
+const Container = styled.View<ContainerProps>`
   flex: 1;
   flex-direction: row;
   width: ${windowWidth - 42}px;
@@ -28,8 +35,8 @@ const Container = styled.View`
   justify-content: space-between;
   align-items: center;
   margin-top: 20px;
-  margin-left: 21px;
-  margin-right: 21px;
+  margin-left: ${({ marginLeft }) => (marginLeft ? marginLeft : 21)}px;
+  margin-right: ${({ marginRight }) => (marginRight ? marginRight : 21)}px;
 `;
 
 export const Title = styled.Text`

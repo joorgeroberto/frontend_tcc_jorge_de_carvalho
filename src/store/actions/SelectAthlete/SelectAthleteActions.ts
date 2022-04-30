@@ -34,7 +34,7 @@ export const SelectAthleteActions = {
       if (token === null) {
         handleError({
           type: GET_ALL_ATHLETES_FROM_GROUP_FAIL,
-          message: 'Úsuário inválido, por favor faça login novamente.',
+          message: 'Usuário inválido, por favor faça login novamente.',
         });
         return navigation.navigate({
           name: 'Login',
