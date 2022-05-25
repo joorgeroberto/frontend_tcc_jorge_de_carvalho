@@ -12,17 +12,22 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DateSelector } from '@screens/SignUp/view/DateSelector';
 import { API_BASE_URL } from '@config/Api';
-import { WeekQuantitySelector } from '@components/WeekQuantitySelector';
+import { NumberQuantitySelector } from '@components/NumberQuantitySelector';
 
 interface Props {
   athlete: AthleteData;
-  // onPress: (data: SelectGenderAndBirthdateReturnData) => void;
+  planning: PlanningData;
+  onPress: (data: RegisterPlanningNameWeekAndDateReturnData) => void;
 }
 
-export function RegisterPlanningNameWeekAndDate({ athlete }: Props) {
+export function RegisterPlanningNameWeekAndDate({
+  athlete,
+  planning: { name, numberOfWeeks, startDate },
+  onPress,
+}: Props) {
   const validationSchema = yup.object().shape({
-    startDate: yup.string().required('Por favor, selecione uma data de inicio.'),
     name: yup.string().required('Por favor, digite o nome do planejamento.'),
+    startDate: yup.string().required('Por favor, selecione uma data de inicio.'),
     numberOfWeeks: yup
       .number()
       .required('Por favor, digite o uma quantidade válida de semanas.')
@@ -32,13 +37,13 @@ export function RegisterPlanningNameWeekAndDate({ athlete }: Props) {
   const { control, handleSubmit } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      numberOfWeeks: 0,
-      // birthdate,
-      // startDate,
+      name,
+      numberOfWeeks,
+      startDate,
     },
   });
 
-  const onSubmit = (info: any) => console.log(info);
+  const onSubmit = (info: any) => onPress(info);
 
   return (
     <Container>
@@ -56,11 +61,11 @@ export function RegisterPlanningNameWeekAndDate({ athlete }: Props) {
         placeholder={'Digite o nome do planejamento.'}
       />
 
-      <WeekQuantitySelector
+      <NumberQuantitySelector
         control={control}
         name={'numberOfWeeks'}
         label={'Quantidade de semanas:'}
-        description={'semanas'}
+        description={{ singular: 'semana', plural: 'semanas' }}
       />
 
       <DateSelector

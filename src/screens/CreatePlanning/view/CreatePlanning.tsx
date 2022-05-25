@@ -1,11 +1,18 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Container, Header, ProgressBar } from '../styles/CreatePlanning.styles';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  Container,
+  Header,
+  ProgressBar,
+  AthleteCell,
+  AthleteCellContainer,
+} from '../styles/CreatePlanning.styles';
 import { useNavigation } from '@react-navigation/native';
 
 import { RegisterPlanningNameWeekAndDate } from './RegisterPlanningNameWeekAndDate';
 
 import { useDispatch } from 'react-redux';
 import { SignUpActions } from '@storeData/actions/SignUp';
+import { CreateReferenceTraining } from './CreateReferenceTraining';
 
 const quantity = 6;
 
@@ -23,29 +30,36 @@ export function CreatePlanning({ route }: Props) {
   const athlete = (route?.params?.athlete as AthleteData) || {};
 
   const [step, setStep] = useState(0);
-  const [planningData, setPlanningData] = useState<SignUpData>({
+  const [referenceTraining, setReferenceTraining] = useState<TrainingData>({
+    date: new Date().toString(),
+    isOptional: true,
+    exerciseGroups: [],
+  });
+  const [planningData, setPlanningData] = useState<PlanningData>({
     name: '',
-    user_type: 'athlete',
-    password: '',
-    athlete_image: '',
-    email: '',
-    phone: '',
-    birthdate: '',
-    gender: 'male',
-    group_name: '',
-    athletes_quantity: 0,
-    group_image: '',
+    numberOfWeeks: 0,
+    startDate: '',
+    endDate: '',
+    athleteId: athlete.id,
+    trainings: [],
   });
 
+  const isFirstStep = useMemo(() => step === 0, [step]);
+
   const isFourthStep = useMemo(() => step >= 4, [step]);
+
+  // useEffect(() => {
+  //   console.log('referenceTraining', referenceTraining);
+  //   console.log('planningData', planningData);
+  // }, [planningData, referenceTraining]);
 
   const title = useMemo(() => {
     // const user_type = signUpData?.user_type;
 
-    // const isAdvisorRegisterGroupStep = isFourthStep && user_type === 'advisor';
-    // if (isAdvisorRegisterGroupStep) {
-    //   return 'Cadastre o seu grupo';
-    // }
+    const isCreateReferenceTrainningStep = step === 1;
+    if (isCreateReferenceTrainningStep) {
+      return 'Crie um treino de referência';
+    }
 
     // const isAthleteRegisterGroupStep = isFourthStep && user_type !== 'advisor';
     // if (isAthleteRegisterGroupStep) {
@@ -53,7 +67,7 @@ export function CreatePlanning({ route }: Props) {
     // }
 
     return 'Cadastrar planejamento';
-  }, []);
+  }, [step]);
 
   const toPreviousStep = () => {
     if (step > 0) {
@@ -70,20 +84,21 @@ export function CreatePlanning({ route }: Props) {
   }, [isFourthStep, step]);
 
   const dispatchData = useCallback(
-    (data: SignUpData) => {
+    (data: PlanningData) => {
       if (!isFourthStep) {
         return;
       }
-
-      return dispatch(SignUpActions.SignUp(data));
+      // Add dispatch
+      // return dispatch(SignUpActions.SignUp(data));
+      return data;
     },
-    [isFourthStep, dispatch],
+    [isFourthStep],
   );
 
-  const handleOnPressNext = (data: SignUpData) => {
+  const handleOnPressNext = (data: PlanningData) => {
     let planningDataTemp = { ...planningData };
     Object.keys(data).forEach(key => {
-      planningDataTemp[key as keyof SignUpData] = data[key as keyof SignUpData] as never;
+      planningDataTemp[key as keyof PlanningData] = data[key as keyof PlanningData] as never;
     });
 
     setPlanningData(planningDataTemp);
@@ -94,9 +109,34 @@ export function CreatePlanning({ route }: Props) {
   const renderStep = () => {
     switch (step) {
       case 0:
-        return <RegisterPlanningNameWeekAndDate athlete={athlete} />;
-      default:
+        return (
+          <RegisterPlanningNameWeekAndDate
+            athlete={athlete}
+            planning={planningData}
+            onPress={data => handleOnPressNext(data as PlanningData)}
+          />
+        );
+      case 1:
+        return (
+          <CreateReferenceTraining
+            athlete={athlete}
+            referenceTraining={referenceTraining}
+            onPress={data => {
+              setReferenceTraining(data as TrainingData);
+              toNextStep();
+            }}
+          />
+        );
+      case 2:
         return <></>;
+      default:
+        return (
+          <RegisterPlanningNameWeekAndDate
+            athlete={athlete}
+            planning={planningData}
+            onPress={data => handleOnPressNext(data as PlanningData)}
+          />
+        );
     }
   };
 
@@ -104,6 +144,16 @@ export function CreatePlanning({ route }: Props) {
     <Container>
       <Header title={title} onPressBackButton={toPreviousStep} />
       <ProgressBar quantity={quantity} activeBar={step} />
+      {!isFirstStep && (
+        <AthleteCellContainer>
+          <AthleteCell
+            name={athlete.name}
+            image={athlete.image}
+            description={planningData.name}
+            marginTop={32}
+          />
+        </AthleteCellContainer>
+      )}
 
       {renderStep()}
     </Container>

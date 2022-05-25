@@ -9,12 +9,26 @@ interface Props {
   name: string;
   description?: string;
   image?: string;
-  onPress: () => void;
+  marginTop?: number;
+  borderColor?: string;
+  onPress?: () => void;
 }
 
-export function AthleteCell({ name, image = '', description, onPress }: Props) {
+export function AthleteCell({
+  name,
+  image = '',
+  description,
+  marginTop = 0,
+  borderColor,
+  onPress,
+}: Props) {
   return (
-    <Container onPress={onPress}>
+    <Container
+      marginTop={marginTop}
+      borderColor={borderColor}
+      onPress={() => {
+        onPress ? onPress() : {};
+      }}>
       <Image source={{ uri: `${API_BASE_URL}/files/${image}` }} />
       <TextContainer>
         <Name>{name}</Name>
@@ -24,16 +38,22 @@ export function AthleteCell({ name, image = '', description, onPress }: Props) {
   );
 }
 
-const Container = styled.TouchableOpacity`
+interface ContainerProps {
+  marginTop: number;
+  borderColor: string;
+}
+
+const Container = styled.TouchableOpacity<ContainerProps>`
   flex: 1;
   flex-direction: row;
   width: ${windowWidth - 42}px;
   padding-top: 10px;
   margin-left: 21px;
+  margin-top: ${({ marginTop }) => marginTop}px;
   padding-bottom: 10px;
   justify-content: flex-start;
   border-bottom-width: 1px;
-  border-bottom-color: ${colors.GRAY2};
+  border-bottom-color: ${({ borderColor }) => (borderColor ? borderColor : colors.GRAY2)};
 `;
 
 const Image = styled.Image.attrs({

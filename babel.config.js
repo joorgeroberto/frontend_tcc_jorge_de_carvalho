@@ -23,6 +23,7 @@ module.exports = {
           '@config': './src/config',
           '@storeData': './src/store',
           '@utils': './src/utils',
+          '@hooks': './src/hooks',
         },
       },
     ],

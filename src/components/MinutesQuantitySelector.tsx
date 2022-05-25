@@ -1,16 +1,21 @@
 import colors from '@config/colors';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Controller } from 'react-hook-form';
 import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import { QuantityButton } from './QuantityButton';
 const windowWidth = Dimensions.get('window').width;
 
+interface DescriptionInterface {
+  singular: string;
+  plural: string;
+}
+
 interface Props {
   control: any;
   name?: string;
   label?: string;
-  description?: string;
+  description?: DescriptionInterface;
 }
 
 interface handleOnChangeProps {
@@ -18,24 +23,34 @@ interface handleOnChangeProps {
   type: 'plus' | 'minus';
 }
 
-export function WeekQuantitySelector({
+export function MinutesQuantitySelector({
   control,
   name = 'numberOfWeeks',
   label = 'Quantidade de semanas:',
-  description = 'semanas',
+  description = { singular: 'semana', plural: 'semanas' },
 }: Props) {
   function handleOnChange({ value, type }: handleOnChangeProps) {
     const isPlus = type === 'plus';
-    const isZero = value === 0;
+    const needsToResetValue = value - 0.5 <= 0.0;
     if (isPlus) {
-      return value + 1;
+      return value + 0.5;
     }
-    if (isZero) {
-      return value;
+    if (needsToResetValue) {
+      return 0;
     }
 
-    return value - 1;
+    return value - 0.5;
   }
+
+  const getValueText = useCallback((value: number) => {
+    const formatedValue = Number(value).toFixed(1);
+    const [hour, minutes] = formatedValue.toString().split('.');
+
+    const formatedHour = Number(hour) < 10 ? `0${hour}` : hour;
+    const formatedMinutes = Number(minutes) === 5 ? '30' : '00';
+
+    return `${formatedHour}:${formatedMinutes}`;
+  }, []);
 
   return (
     <Controller
@@ -50,13 +65,15 @@ export function WeekQuantitySelector({
                 type="minus"
                 onPress={() => onChange(handleOnChange({ type: 'minus', value: value }))}
               />
-              <ValueText>{value}</ValueText>
+              <ValueText>{getValueText(value)}</ValueText>
               <QuantityButton
                 type="plus"
                 onPress={() => onChange(handleOnChange({ type: 'plus', value: value }))}
               />
             </ButtonsAndInfoContainer>
-            <DescriptionText>{description}</DescriptionText>
+            <DescriptionText>
+              {value === 1 ? description.singular : description.plural}
+            </DescriptionText>
             {error && error.message && <StyledTextError>{error.message}</StyledTextError>}
           </Container>
         );
@@ -69,7 +86,6 @@ const Container = styled.View`
   flex: 1;
   width: ${windowWidth - 42}px;
   max-width: ${windowWidth - 42}px;
-  /* justify-content: space-between; */
   justify-content: center;
   align-items: flex-start;
   margin-top: 20px;

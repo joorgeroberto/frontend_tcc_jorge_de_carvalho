@@ -57,3 +57,33 @@ interface AthleteData {
   name: string;
   image?: string;
 }
+
+interface RegisterPlanningNameWeekAndDateReturnData {
+  name: string;
+  numberOfWeeks: number;
+  startDate: string;
+}
+
+interface ExerciseData {
+  type: 'distance' | 'duration';
+  duration: float;
+  distance: float;
+  description: string;
+}
+
+interface ExerciseGroupData {
+  numberRepetitions: number;
+  exercises: Array<ExerciseData>;
+}
+
+interface TrainingData {
+  date: string;
+  isOptional: boolean;
+  exerciseGroups: Array<ExerciseGroupData>;
+}
+
+interface PlanningData extends RegisterPlanningNameWeekAndDateReturnData {
+  endDate: string;
+  athleteId: string;
+  trainings: Array<TrainingData>;
+}

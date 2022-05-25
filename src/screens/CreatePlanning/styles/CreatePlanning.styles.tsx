@@ -6,6 +6,7 @@ import {
   ProgressBar as RawProgressBar,
 } from '@components/index';
 import colors from '@config/colors';
+import { AthleteCell as RawAthleteCell } from '@components/AthleteCell';
 
 export const Container = styled.View`
   flex: 1;
@@ -19,3 +20,9 @@ export const ProgressBar = styled(RawProgressBar).attrs({
   marginLeft: 21,
   marginRight: 21,
 })``;
+
+export const AthleteCellContainer = styled.View`
+  height: 120px;
+`;
+
+export const AthleteCell = styled(RawAthleteCell).attrs({ borderColor: colors.TRANSPARENT })``;
