@@ -13,6 +13,7 @@ import { RegisterPlanningNameWeekAndDate } from './RegisterPlanningNameWeekAndDa
 import { useDispatch } from 'react-redux';
 import { SignUpActions } from '@storeData/actions/SignUp';
 import { CreateReferenceTraining } from './CreateReferenceTraining';
+import { RegisterPlanningWeek } from './RegisterPlanningWeek';
 
 const quantity = 6;
 
@@ -117,6 +118,7 @@ export function CreatePlanning({ route }: Props) {
           />
         );
       case 1:
+        return <RegisterPlanningWeek />;
         return (
           <CreateReferenceTraining
             athlete={athlete}
@@ -128,7 +130,7 @@ export function CreatePlanning({ route }: Props) {
           />
         );
       case 2:
-        return <></>;
+        return <RegisterPlanningWeek />;
       default:
         return (
           <RegisterPlanningNameWeekAndDate

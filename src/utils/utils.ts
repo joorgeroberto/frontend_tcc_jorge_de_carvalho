@@ -12,3 +12,19 @@ export const formatDate = (rawDate: string, international = false) => {
 
   return international ? `${year}-${month}-${day}` : `${day}/${month}/${year}`;
 };
+
+export const getWeekDay = (rawDate: string) => {
+  const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  const date = new Date(rawDate);
+
+  return weekDays[date.getDay()];
+};
+
+export const getWeekOfMonthNumber = (rawDate: string) => {
+  const d = new Date(rawDate);
+  const date = d.getDate();
+  const day = d.getDay();
+  const weekOfMonth = Math.ceil((date - 1 - day) / 7);
+
+  return weekOfMonth;
+};
