@@ -1,34 +1,101 @@
 import colors from '@config/colors';
-import React from 'react';
+import { calculateMonthDays, getWeekDay, weekDays } from '@utils/utils';
+import moment from 'moment';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components/native';
 import { BackButton } from './BackButton';
 
 interface Props {
-  // startDate: string;
-  // currentDate: string;
-  // onPress: (date: string) => void;
+  startDate: string;
+  endDate: string;
+  numberOfWeeks: number;
+  selectedDate: string;
+  onPress: (date: string) => void;
 }
 
-const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-const weekDaysDate = [31, 2, 3, 4, 5, 6, 7];
+interface HandleOnSelectDayProps {
+  isSelected: boolean;
+  isDisabled: boolean;
+  currentDate: string;
+}
 
-export function WeekSelector({}: Props) {
+// const weekDaysDate = [31, 2, 3, 4, 5, 6, 7];
+
+export function WeekSelector({ startDate, endDate, selectedDate, numberOfWeeks, onPress }: Props) {
+  const [currentWeek, setCurrentWeek] = useState(1);
+
+  const formatedWeeksQuantity = useMemo(() => {
+    const isStartDateSunday = getWeekDay(startDate).toString() === 'Dom';
+    if (isStartDateSunday) {
+      return numberOfWeeks;
+    }
+    return numberOfWeeks + 1;
+  }, [startDate, numberOfWeeks]);
+
+  const handleWeekArrowButton = (type: 'next' | 'previous') => {
+    const isToNext = type === 'next';
+    const isFirstWeek = currentWeek === 1;
+    const isLastWeek = currentWeek === formatedWeeksQuantity;
+    if (isLastWeek && isToNext) {
+      return setCurrentWeek(formatedWeeksQuantity);
+    }
+    if (isToNext) {
+      return setCurrentWeek(current => current + 1);
+    }
+    if (isFirstWeek && !isToNext) {
+      return setCurrentWeek(1);
+    }
+
+    return setCurrentWeek(current => current - 1);
+  };
+
+  const weekDaysDate = useMemo(
+    () =>
+      calculateMonthDays({
+        startDate,
+        endDate,
+        weeksQuantity: formatedWeeksQuantity,
+      }),
+    [startDate, endDate, formatedWeeksQuantity],
+  );
+
+  const handleOnSelectDay = ({ isSelected, isDisabled, currentDate }: HandleOnSelectDayProps) => {
+    const canChangeValue = isSelected || isDisabled;
+    if (canChangeValue) {
+      return;
+    }
+    onPress(currentDate);
+  };
+
   return (
     <Container>
       <HeaderContainer>
-        <BackButton height={25} width={25} onPress={() => {}} />
-        <HeaderText>{'Semana 1'}</HeaderText>
-        <BackButton height={25} width={25} flipHorizontally onPress={() => {}} />
+        <ArrowButton onPress={() => handleWeekArrowButton('previous')} />
+        <HeaderText>{`Semana ${currentWeek}`}</HeaderText>
+        <ArrowButton flipHorizontally onPress={() => handleWeekArrowButton('next')} />
       </HeaderContainer>
       <DaysContainer>
-        {weekDays.map((day, index) => (
-          <WeekDayContainer>
-            <WeekDayNameText isSelected={index === 2}>{day}</WeekDayNameText>
-            <WeekDayDateContainer isSelected={index === 2}>
-              <WeekDayDateText isSelected={index === 2}>{weekDaysDate[index]}</WeekDayDateText>
-            </WeekDayDateContainer>
-          </WeekDayContainer>
-        ))}
+        {weekDays.map((day, index) => {
+          const currentDayIndex = index + 7 * (currentWeek - 1);
+          const currentDate = new Date(weekDaysDate[currentDayIndex].fullDate);
+          const isDisabled =
+            moment(currentDate) < moment(startDate) || moment(currentDate) > moment(endDate);
+          const isSelected = new Date(selectedDate).toString() === currentDate.toString();
+
+          return (
+            <WeekDayContainer
+              onPress={() =>
+                handleOnSelectDay({ isSelected, isDisabled, currentDate: currentDate.toString() })
+              }>
+              <WeekDayNameText isSelected={isSelected}>{day}</WeekDayNameText>
+              <WeekDayDateContainer isSelected={isSelected}>
+                <WeekDayDateText isSelected={isSelected} isDisabled={isDisabled}>
+                  {currentDate.getDate()}
+                </WeekDayDateText>
+              </WeekDayDateContainer>
+            </WeekDayContainer>
+          );
+        })}
       </DaysContainer>
     </Container>
   );
@@ -72,8 +139,14 @@ const WeekDayContainer = styled.TouchableOpacity`
   justify-content: center;
 `;
 
+const ArrowButton = styled(BackButton).attrs({
+  height: 25,
+  width: 25,
+})``;
+
 interface WeekDayDateProps {
   isSelected: Boolean;
+  isDisabled?: Boolean;
 }
 
 const WeekDayNameText = styled.Text<WeekDayDateProps>`
@@ -97,5 +170,6 @@ const WeekDayDateText = styled.Text<WeekDayDateProps>`
   font-size: ${({ isSelected }) => (isSelected ? 18 : 12)}px;
   line-height: ${({ isSelected }) => (isSelected ? 21 : 14)}px;
   font-weight: 700;
-  color: ${({ isSelected }) => (isSelected ? colors.WHITE : colors.PRIMARY)};
+  color: ${({ isSelected, isDisabled }) =>
+    isDisabled ? colors.GRAYPLACEHOLDER : isSelected ? colors.WHITE : colors.PRIMARY};
 `;

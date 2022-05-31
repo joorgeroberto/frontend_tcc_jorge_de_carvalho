@@ -118,7 +118,7 @@ export function CreatePlanning({ route }: Props) {
           />
         );
       case 1:
-        return <RegisterPlanningWeek />;
+        return <RegisterPlanningWeek planningData={planningData} />;
         return (
           <CreateReferenceTraining
             athlete={athlete}
@@ -130,7 +130,7 @@ export function CreatePlanning({ route }: Props) {
           />
         );
       case 2:
-        return <RegisterPlanningWeek />;
+        return <RegisterPlanningWeek planningData={planningData} />;
       default:
         return (
           <RegisterPlanningNameWeekAndDate

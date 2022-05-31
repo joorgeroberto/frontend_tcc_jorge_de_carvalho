@@ -13,6 +13,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { DateSelector } from '@screens/SignUp/view/DateSelector';
 import { API_BASE_URL } from '@config/Api';
 import { NumberQuantitySelector } from '@components/NumberQuantitySelector';
+import moment from 'moment';
 
 interface Props {
   athlete: AthleteData;
@@ -43,7 +44,13 @@ export function RegisterPlanningNameWeekAndDate({
     },
   });
 
-  const onSubmit = (info: any) => onPress(info);
+  const onSubmit = (info: any) => {
+    info.endDate = moment(info.startDate)
+      .add(7 * info.numberOfWeeks, 'days')
+      .format();
+
+    onPress(info);
+  };
 
   return (
     <Container>
