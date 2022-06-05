@@ -34,6 +34,23 @@ export const getWeekOfMonthNumber = (rawDate: string) => {
   return weekOfMonth;
 };
 
+interface GetDaysBetweenFisrtAndEndDatesProps {
+  startDate: string;
+  numberOfWeeks: number;
+}
+
+export const getDaysBetweenFisrtAndEndDates = ({
+  startDate,
+  numberOfWeeks,
+}: GetDaysBetweenFisrtAndEndDatesProps) => {
+  let month: Array<string> = [];
+  for (let i = 0; i <= numberOfWeeks * 7; i++) {
+    month.push(moment(startDate).add(i, 'days').format().toString());
+  }
+  console.log(month);
+  return month;
+};
+
 interface CalculateMonthDaysProps {
   startDate: string;
   endDate: string;
@@ -41,7 +58,7 @@ interface CalculateMonthDaysProps {
 }
 
 interface MonthDay {
-  weekDay: string; //WeekDay;
+  weekDay: string;
   fullDate: string;
 }
 
@@ -87,7 +104,7 @@ export const calculateMonthDays = ({
   function populateDaysAfterFirstDay(firstDayIndex: number) {
     for (let i = firstDayIndex + 1; i < month.length; i++) {
       month[i].fullDate = moment(month[firstDayIndex].fullDate)
-        .add(i - 1, 'days')
+        .add(i - firstDayIndex, 'days')
         .format();
     }
   }

@@ -10,6 +10,7 @@ interface Props {
   endDate: string;
   numberOfWeeks: number;
   selectedDate: string;
+  disableSelection?: boolean;
   onPress: (date: string) => void;
 }
 
@@ -21,7 +22,14 @@ interface HandleOnSelectDayProps {
 
 // const weekDaysDate = [31, 2, 3, 4, 5, 6, 7];
 
-export function WeekSelector({ startDate, endDate, selectedDate, numberOfWeeks, onPress }: Props) {
+export function WeekSelector({
+  startDate,
+  endDate,
+  selectedDate,
+  numberOfWeeks,
+  onPress,
+  disableSelection = false,
+}: Props) {
   const [currentWeek, setCurrentWeek] = useState(1);
 
   const formatedWeeksQuantity = useMemo(() => {
@@ -85,9 +93,17 @@ export function WeekSelector({ startDate, endDate, selectedDate, numberOfWeeks, 
           return (
             <WeekDayContainer
               onPress={() =>
-                handleOnSelectDay({ isSelected, isDisabled, currentDate: currentDate.toString() })
+                disableSelection
+                  ? {}
+                  : handleOnSelectDay({
+                      isSelected,
+                      isDisabled,
+                      currentDate: currentDate.toString(),
+                    })
               }>
-              <WeekDayNameText isSelected={isSelected}>{day}</WeekDayNameText>
+              <WeekDayNameText isSelected={isSelected} isDisabled={isDisabled}>
+                {day}
+              </WeekDayNameText>
               <WeekDayDateContainer isSelected={isSelected}>
                 <WeekDayDateText isSelected={isSelected} isDisabled={isDisabled}>
                   {currentDate.getDate()}
@@ -153,7 +169,8 @@ const WeekDayNameText = styled.Text<WeekDayDateProps>`
   font-weight: 700;
   font-size: ${({ isSelected }) => (isSelected ? 20 : 12)}px;
   line-height: ${({ isSelected }) => (isSelected ? 23.5 : 14)}px;
-  color: ${colors.PRIMARY3};
+  color: ${({ isSelected }) => (isSelected ? colors.PRIMARY : colors.PRIMARY3)};
+  opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1.0)};
 `;
 
 const WeekDayDateContainer = styled.View<WeekDayDateProps>`
@@ -171,5 +188,6 @@ const WeekDayDateText = styled.Text<WeekDayDateProps>`
   line-height: ${({ isSelected }) => (isSelected ? 21 : 14)}px;
   font-weight: 700;
   color: ${({ isSelected, isDisabled }) =>
-    isDisabled ? colors.GRAYPLACEHOLDER : isSelected ? colors.WHITE : colors.PRIMARY};
+    isDisabled ? colors.PRIMARY3 : isSelected ? colors.WHITE : colors.PRIMARY};
+  opacity: ${({ isDisabled }) => (isDisabled ? 0.6 : 1.0)};
 `;

@@ -88,10 +88,14 @@ export function CreateReferenceTraining({ athlete, referenceTraining, onPress }:
   });
 
   useEffect(() => {
-    const showModal = errors?.referenceTraining?.exerciseGroups?.find(
-      ({ exercises }) =>
-        (exercises?.message as String) === 'Por favor, insira um ou mais exercícios a este grupo.',
-    );
+    const showModal = errors?.referenceTraining?.exerciseGroups?.find(group => {
+      if (group?.exercises) {
+        return (
+          (group?.exercises?.message as String) ===
+          'Por favor, insira um ou mais exercícios a este grupo.'
+        );
+      }
+    });
     if (showModal) {
       Alert.alert('Por favor, insira um ou mais exercícios ao grupo.');
     }

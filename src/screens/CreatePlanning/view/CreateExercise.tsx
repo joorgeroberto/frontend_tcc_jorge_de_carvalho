@@ -20,12 +20,13 @@ import useExercisesFieldArray from '@hooks/useExercisesFieldArray';
 interface Props {
   index: number;
   control: any;
+  trainingName?: string;
 }
 
-export function CreateExercise({ index, control }: Props) {
+export function CreateExercise({ index, control, trainingName = 'referenceTraining' }: Props) {
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
     control,
-    name: `referenceTraining.exerciseGroups[${index}].exercises`,
+    name: `${trainingName}.exerciseGroups[${index}].exercises`,
   });
 
   return (
@@ -35,21 +36,21 @@ export function CreateExercise({ index, control }: Props) {
           <>
             <ExerciseTypeTabs
               control={control}
-              name={`referenceTraining.exerciseGroups[${index}].exercises[${exerciseIndex}].type`}
+              name={`${trainingName}.exerciseGroups[${index}].exercises[${exerciseIndex}].type`}
             />
             <OneLineInput
               control={control}
               label={'Descrição:'}
-              name={`referenceTraining.exerciseGroups[${index}].exercises[${exerciseIndex}].description`}
+              name={`${trainingName}.exerciseGroups[${index}].exercises[${exerciseIndex}].description`}
             />
             <Controller
               control={control}
-              name={`referenceTraining.exerciseGroups[${index}].exercises[${exerciseIndex}].type`}
+              name={`${trainingName}.exerciseGroups[${index}].exercises[${exerciseIndex}].type`}
               render={({ field: { value } }) => {
                 return value === 'distance' ? (
                   <NumberQuantitySelector
                     control={control}
-                    name={`referenceTraining.exerciseGroups[${index}].exercises[${exerciseIndex}].distance`}
+                    name={`${trainingName}.exerciseGroups[${index}].exercises[${exerciseIndex}].distance`}
                     label={'Exercício:'}
                     numberFormat={'float'}
                     description={{ singular: 'KM', plural: 'KMs' }}
@@ -57,7 +58,7 @@ export function CreateExercise({ index, control }: Props) {
                 ) : (
                   <MinutesQuantitySelector
                     control={control}
-                    name={`referenceTraining.exerciseGroups[${index}].exercises[${exerciseIndex}].duration`}
+                    name={`${trainingName}.exerciseGroups[${index}].exercises[${exerciseIndex}].duration`}
                     label={'Exercitar-se por:'}
                     description={{ singular: 'minuto', plural: 'minutos' }}
                   />
