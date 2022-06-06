@@ -1,6 +1,7 @@
 import { getDaysBetweenFisrtAndEndDates } from '@utils/utils';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Container, WeekSelector } from '../styles/RegisterPlanningWeek.styles';
+import { CreateDailyTraining } from './CreateDailyTraining';
 
 interface Props {
   planning: PlanningData;
@@ -9,6 +10,7 @@ interface Props {
 
 export function RegisterPlanningWeek({ planning, onSave }: Props) {
   const [selectedDate, setSelectedDate] = useState(planning.startDate);
+  const [selectedTraining, setSelectedTraining] = useState<TrainingData | null>(null);
   const onSubmit = (info: any) => console.log(info);
 
   useEffect(() => {
@@ -22,24 +24,16 @@ export function RegisterPlanningWeek({ planning, onSave }: Props) {
       numberOfWeeks: dataAux.numberOfWeeks,
     });
     trainingDays.map(day =>
-      dataAux.trainings.push({ date: day, isOptional: false, exerciseGroups: [] }),
+      dataAux.trainings.push({ date: day, type: 'free', exerciseGroups: [] }),
     );
     onSave(dataAux);
   }, [onSave, planning]);
 
   useEffect(() => {
-    console.log(planning);
-  }, [planning]);
-
-  const selectedTraining = useMemo(() => {
-    // const formatedTrainings = planning?.trainings.map(training =>
-    //   new Date(training.date).toString(),
-    // );
-    // return formatedTrainings.indexOf(new Date(selectedDate).toString());
     const training = planning?.trainings.find(
       el => new Date(el?.date).toString() === new Date(selectedDate).toString(),
     );
-    return training;
+    setSelectedTraining(training || ({} as TrainingData));
   }, [planning, selectedDate]);
 
   return (
@@ -52,6 +46,13 @@ export function RegisterPlanningWeek({ planning, onSave }: Props) {
         selectedDate={selectedDate}
         onPress={data => setSelectedDate(data)}
       />
+      {selectedTraining && (
+        <CreateDailyTraining
+          training={selectedTraining}
+          selectedDate={selectedDate}
+          onPress={data => console.log(data)}
+        />
+      )}
     </Container>
   );
 }

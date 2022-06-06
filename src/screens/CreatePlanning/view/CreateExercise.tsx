@@ -20,37 +20,37 @@ import useExercisesFieldArray from '@hooks/useExercisesFieldArray';
 interface Props {
   index: number;
   control: any;
-  trainingName?: string;
+  name?: string;
 }
 
-export function CreateExercise({ index, control, trainingName = 'referenceTraining' }: Props) {
+export function CreateExercise({ index, control, name = 'referenceTraining' }: Props) {
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
     control,
-    name: `${trainingName}.exerciseGroups[${index}].exercises`,
+    name: `${name}.exerciseGroups[${index}].exercises`,
   });
 
   return (
     <Container>
       {fields.map((_, exerciseIndex) => {
         return (
-          <>
+          <React.Fragment key={`GroupContainer-${index}`}>
             <ExerciseTypeTabs
               control={control}
-              name={`${trainingName}.exerciseGroups[${index}].exercises[${exerciseIndex}].type`}
+              name={`${name}.exerciseGroups[${index}].exercises[${exerciseIndex}].type`}
             />
             <OneLineInput
               control={control}
               label={'Descrição:'}
-              name={`${trainingName}.exerciseGroups[${index}].exercises[${exerciseIndex}].description`}
+              name={`${name}.exerciseGroups[${index}].exercises[${exerciseIndex}].description`}
             />
             <Controller
               control={control}
-              name={`${trainingName}.exerciseGroups[${index}].exercises[${exerciseIndex}].type`}
+              name={`${name}.exerciseGroups[${index}].exercises[${exerciseIndex}].type`}
               render={({ field: { value } }) => {
                 return value === 'distance' ? (
                   <NumberQuantitySelector
                     control={control}
-                    name={`${trainingName}.exerciseGroups[${index}].exercises[${exerciseIndex}].distance`}
+                    name={`${name}.exerciseGroups[${index}].exercises[${exerciseIndex}].distance`}
                     label={'Exercício:'}
                     numberFormat={'float'}
                     description={{ singular: 'KM', plural: 'KMs' }}
@@ -58,7 +58,7 @@ export function CreateExercise({ index, control, trainingName = 'referenceTraini
                 ) : (
                   <MinutesQuantitySelector
                     control={control}
-                    name={`${trainingName}.exerciseGroups[${index}].exercises[${exerciseIndex}].duration`}
+                    name={`${name}.exerciseGroups[${index}].exercises[${exerciseIndex}].duration`}
                     label={'Exercitar-se por:'}
                     description={{ singular: 'minuto', plural: 'minutos' }}
                   />
@@ -71,7 +71,7 @@ export function CreateExercise({ index, control, trainingName = 'referenceTraini
               label={`Remover exercício ${exerciseIndex + 1}`}
               onPress={() => remove(exerciseIndex)}
             />
-          </>
+          </React.Fragment>
         );
       })}
       <BlueHollowButton

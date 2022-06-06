@@ -78,7 +78,7 @@ interface ExerciseGroupData {
 
 interface TrainingData {
   date: string;
-  isOptional: boolean;
+  type: string;
   exerciseGroups: Array<ExerciseGroupData>;
 }
 

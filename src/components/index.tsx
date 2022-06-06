@@ -10,5 +10,6 @@ export * from './AthleteCell';
 export * from './Loader';
 export * from './NumberQuantitySelector';
 export * from './MinutesQuantitySelector';
+export * from './OptionsModal';
 export * from './WeekSelector';
 export * from './ExerciseTypeTabs';

@@ -33,7 +33,7 @@ export function CreatePlanning({ route }: Props) {
   const [step, setStep] = useState(0);
   const [referenceTraining, setReferenceTraining] = useState<TrainingData>({
     date: new Date().toString(),
-    isOptional: true,
+    type: 'mandatory',
     exerciseGroups: [],
   });
   const [planningData, setPlanningData] = useState<PlanningData>({
@@ -121,7 +121,6 @@ export function CreatePlanning({ route }: Props) {
         return <RegisterPlanningWeek planning={planningData} onSave={data => {}} />;
         return (
           <CreateReferenceTraining
-            athlete={athlete}
             referenceTraining={referenceTraining}
             onPress={data => {
               setReferenceTraining(data as TrainingData);

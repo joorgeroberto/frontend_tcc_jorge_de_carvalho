@@ -92,6 +92,7 @@ export function WeekSelector({
 
           return (
             <WeekDayContainer
+              key={`WeekDayContainer-${index}`}
               onPress={() =>
                 disableSelection
                   ? {}

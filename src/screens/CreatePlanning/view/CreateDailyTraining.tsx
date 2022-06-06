@@ -10,7 +10,7 @@ import {
   AthleteName,
   Input,
   StyledTextError,
-} from '../styles/CreateReferenceTraining.styles';
+} from '../styles/CreateDailyTraining.styles';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,15 +19,17 @@ import useExerciseGroupsFieldArray from '@hooks/useExerciseGroupsFieldArray';
 import useExercisesFieldArray from '@hooks/useExercisesFieldArray';
 import { CreateExercise } from './CreateExercise';
 import { Alert } from 'react-native';
+import { OptionsModal } from '@components/OptionsModal';
 
 interface Props {
-  referenceTraining: TrainingData;
+  training: TrainingData | object;
+  selectedDate: string;
   onPress: (data: TrainingData) => void;
 }
 
-export function CreateReferenceTraining({ referenceTraining, onPress }: Props) {
+export function CreateDailyTraining({ training, selectedDate, onPress }: Props) {
   const validationSchema = yup.object().shape({
-    referenceTraining: yup.object().shape({
+    training: yup.object().shape({
       date: yup
         .string()
         .required('Por favor, selecione uma data válida.')
@@ -82,12 +84,12 @@ export function CreateReferenceTraining({ referenceTraining, onPress }: Props) {
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      referenceTraining,
+      training,
     },
   });
 
   useEffect(() => {
-    const showModal = errors?.referenceTraining?.exerciseGroups?.find(group => {
+    const showModal = errors?.training?.exerciseGroups?.find(group => {
       if (group?.exercises) {
         return (
           (group?.exercises?.message as String) ===
@@ -100,6 +102,10 @@ export function CreateReferenceTraining({ referenceTraining, onPress }: Props) {
     }
   }, [errors]);
 
+  useEffect(() => {
+    console.log('training', training);
+  }, [training]);
+
   const {
     fields: exerciseGroups,
     append,
@@ -110,7 +116,7 @@ export function CreateReferenceTraining({ referenceTraining, onPress }: Props) {
     insert,
   } = useFieldArray({
     control,
-    name: 'referenceTraining.exerciseGroups',
+    name: 'training.exerciseGroups',
   });
 
   const showNextButton = useMemo(
@@ -118,21 +124,28 @@ export function CreateReferenceTraining({ referenceTraining, onPress }: Props) {
     [exerciseGroups],
   );
 
-  const onSubmit = (info: any) => onPress(info?.referenceTraining);
+  // const onSubmit = (info: any) => onPress(info?.training);
+  const onSubmit = (info: any) => console.log(info?.training);
 
   return (
     <Container>
+      <OptionsModal
+        control={control}
+        name={'training.type'}
+        label={'Tipo de treino:'}
+        modalTitle={'Selecione o tipo de treino'}
+      />
       {exerciseGroups.map((field: any, index: number) => {
         return (
-          <GroupContainer>
+          <GroupContainer key={`GroupContainer-${index}`}>
             <GroupName>{`Grupo ${index + 1}:`}</GroupName>
             <NumberQuantitySelector
               control={control}
-              name={`referenceTraining.exerciseGroups.${index}.numberRepetitions`}
+              name={`training.exerciseGroups.${index}.numberRepetitions`}
               label={'Repetir Grupo:'}
               description={{ singular: 'vez', plural: 'vezes' }}
             />
-            <CreateExercise index={index} control={control} />
+            <CreateExercise name={'training'} index={index} control={control} />
           </GroupContainer>
         );
       })}
