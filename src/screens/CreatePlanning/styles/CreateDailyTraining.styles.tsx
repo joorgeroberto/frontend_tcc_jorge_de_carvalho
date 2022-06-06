@@ -11,7 +11,7 @@ export const Container = styled.ScrollView`
   background-color: white;
 `;
 
-export const NextButton = styled(RawButton)`
+export const SaveButton = styled(RawButton)`
   width: 100%;
   margin-top: 40px;
 `;

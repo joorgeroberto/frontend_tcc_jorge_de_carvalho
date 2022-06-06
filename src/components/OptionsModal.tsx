@@ -55,7 +55,6 @@ export function OptionsModal({ control, name, label, modalTitle }: Props) {
           <Label>{label}</Label>
           <ButtonContainer activeOpacity={0.7} onPress={() => setIsVisible(true)}>
             <TextButton numberOfLines={1} ellipsizeMode={'tail'}>
-              {console.log('value', value)}
               {getLabel(value) || 'Type'}
             </TextButton>
             <Image source={require('../assets/icons/arrow_down_icon.png')} />

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import {
   Container,
-  NextButton,
+  SaveButton,
   HollowButton,
   HollowButtonContainer,
   GroupName,
@@ -24,10 +24,11 @@ import { OptionsModal } from '@components/OptionsModal';
 interface Props {
   training: TrainingData | object;
   selectedDate: string;
-  onPress: (data: TrainingData) => void;
+  onSave: (data: TrainingData) => void;
+  referenceTraining: TrainingData;
 }
 
-export function CreateDailyTraining({ training, selectedDate, onPress }: Props) {
+export function CreateDailyTraining({ training, selectedDate, onSave, referenceTraining }: Props) {
   const validationSchema = yup.object().shape({
     training: yup.object().shape({
       date: yup
@@ -79,6 +80,7 @@ export function CreateDailyTraining({ training, selectedDate, onPress }: Props) 
   const {
     control,
     watch,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -89,7 +91,8 @@ export function CreateDailyTraining({ training, selectedDate, onPress }: Props) 
   });
 
   useEffect(() => {
-    const showModal = errors?.training?.exerciseGroups?.find(group => {
+    console.log(errors?.training);
+    const showModal = errors?.training?.exerciseGroups?.find((group: any) => {
       if (group?.exercises) {
         return (
           (group?.exercises?.message as String) ===
@@ -103,8 +106,8 @@ export function CreateDailyTraining({ training, selectedDate, onPress }: Props) 
   }, [errors]);
 
   useEffect(() => {
-    console.log('training', training);
-  }, [training]);
+    reset({ training });
+  }, [training, reset]);
 
   const {
     fields: exerciseGroups,
@@ -119,50 +122,70 @@ export function CreateDailyTraining({ training, selectedDate, onPress }: Props) 
     name: 'training.exerciseGroups',
   });
 
-  const showNextButton = useMemo(
+  const showSaveButton = useMemo(
     () => exerciseGroups && Array.isArray(exerciseGroups) && exerciseGroups.length > 0,
     [exerciseGroups],
   );
 
-  // const onSubmit = (info: any) => onPress(info?.training);
-  const onSubmit = (info: any) => console.log(info?.training);
+  const onSubmit = (info: any) => onSave(info?.training);
 
   return (
-    <Container>
-      <OptionsModal
-        control={control}
-        name={'training.type'}
-        label={'Tipo de treino:'}
-        modalTitle={'Selecione o tipo de treino'}
-      />
-      {exerciseGroups.map((field: any, index: number) => {
+    <Controller
+      control={control}
+      name={'training'}
+      render={({ field: { onChange, value } }) => {
+        console.log('value', value);
         return (
-          <GroupContainer key={`GroupContainer-${index}`}>
-            <GroupName>{`Grupo ${index + 1}:`}</GroupName>
-            <NumberQuantitySelector
-              control={control}
-              name={`training.exerciseGroups.${index}.numberRepetitions`}
-              label={'Repetir Grupo:'}
-              description={{ singular: 'vez', plural: 'vezes' }}
-            />
-            <CreateExercise name={'training'} index={index} control={control} />
-          </GroupContainer>
-        );
-      })}
+          <>
+            <Container>
+              <OptionsModal
+                control={control}
+                name={'training.type'}
+                label={'Tipo de treino:'}
+                modalTitle={'Selecione o tipo de treino'}
+              />
+              {exerciseGroups.map((field: any, index: number) => {
+                return (
+                  <GroupContainer key={`GroupContainer-${index}`}>
+                    <GroupName>{`Grupo ${index + 1}:`}</GroupName>
+                    <NumberQuantitySelector
+                      control={control}
+                      name={`training.exerciseGroups.${index}.numberRepetitions`}
+                      label={'Repetir Grupo:'}
+                      description={{ singular: 'vez', plural: 'vezes' }}
+                    />
+                    <CreateExercise name={'training'} index={index} control={control} />
+                  </GroupContainer>
+                );
+              })}
 
-      <HollowButtonContainer>
-        <HollowButton
-          imageSource={require('@assets/icons/plus_icon_blue.png')}
-          label={'Adicionar grupo de exercícios'}
-          onPress={() =>
-            append({
-              numberRepetitions: 0,
-              exercises: [],
-            })
-          }
-        />
-      </HollowButtonContainer>
-      {showNextButton ? <NextButton label={'Próximo'} onPress={handleSubmit(onSubmit)} /> : <></>}
-    </Container>
+              <HollowButtonContainer>
+                <HollowButton
+                  imageSource={require('@assets/icons/plus_icon_blue.png')}
+                  label={'Adicionar grupo de exercícios'}
+                  onPress={() =>
+                    append({
+                      numberRepetitions: 0,
+                      exercises: [],
+                    })
+                  }
+                />
+              </HollowButtonContainer>
+
+              <HollowButton
+                imageSource={require('@assets/icons/plus_icon_blue.png')}
+                label={'Replicar treino de referência'}
+                onPress={() => reset({ training: referenceTraining })}
+              />
+              {showSaveButton ? (
+                <SaveButton label={'Salvar'} onPress={handleSubmit(onSubmit)} />
+              ) : (
+                <></>
+              )}
+            </Container>
+          </>
+        );
+      }}
+    />
   );
 }

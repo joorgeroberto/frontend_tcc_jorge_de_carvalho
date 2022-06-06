@@ -94,13 +94,14 @@ export function WeekSelector({
             <WeekDayContainer
               key={`WeekDayContainer-${index}`}
               onPress={() =>
-                disableSelection
-                  ? {}
-                  : handleOnSelectDay({
-                      isSelected,
-                      isDisabled,
-                      currentDate: currentDate.toString(),
-                    })
+                //disableSelection
+                //</DaysContainer>? {}
+                //:
+                handleOnSelectDay({
+                  isSelected,
+                  isDisabled,
+                  currentDate: currentDate.toString(),
+                })
               }>
               <WeekDayNameText isSelected={isSelected} isDisabled={isDisabled}>
                 {day}
