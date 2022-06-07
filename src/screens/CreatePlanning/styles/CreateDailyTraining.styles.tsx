@@ -43,3 +43,20 @@ export const GroupName = styled.Text`
   line-height: 21px;
   color: ${colors.PRIMARY};
 `;
+
+export const Image = styled.Image.attrs({
+  resizeMode: 'cover',
+})`
+  width: ${windowWidth * 0.3853}px;
+  height: ${windowWidth * 0.476}px;
+  align-self: center;
+`;
+
+export const ImageDescription = styled.Text`
+  max-width: 80%;
+  font-size: 17px;
+  font-weight: bold;
+  text-align: center;
+  margin-left: 10%;
+  color: ${colors.PRIMARY3};
+`;

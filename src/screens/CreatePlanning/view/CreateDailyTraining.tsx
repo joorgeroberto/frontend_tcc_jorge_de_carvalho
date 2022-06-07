@@ -7,9 +7,7 @@ import {
   GroupName,
   GroupContainer,
   Image,
-  AthleteName,
-  Input,
-  StyledTextError,
+  ImageDescription,
 } from '../styles/CreateDailyTraining.styles';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -122,6 +120,8 @@ export function CreateDailyTraining({ training, selectedDate, onSave, referenceT
     name: 'training.exerciseGroups',
   });
 
+  const isFreeTraining = useCallback((type: any) => type.toString() === 'free', []);
+
   const showSaveButton = useMemo(
     () => exerciseGroups && Array.isArray(exerciseGroups) && exerciseGroups.length > 0,
     [exerciseGroups],
@@ -129,61 +129,73 @@ export function CreateDailyTraining({ training, selectedDate, onSave, referenceT
 
   const onSubmit = (info: any) => onSave(info?.training);
 
+  const renderExerciseGroupsSelection = () => {
+    return (
+      <>
+        {exerciseGroups.map((_: any, index: number) => {
+          return (
+            <GroupContainer key={`GroupContainer-${index}`}>
+              <GroupName>{`Grupo ${index + 1}:`}</GroupName>
+              <NumberQuantitySelector
+                control={control}
+                name={`training.exerciseGroups.${index}.numberRepetitions`}
+                label={'Repetir Grupo:'}
+                description={{ singular: 'vez', plural: 'vezes' }}
+              />
+              <CreateExercise name={'training'} index={index} control={control} />
+            </GroupContainer>
+          );
+        })}
+        <HollowButtonContainer>
+          <HollowButton
+            imageSource={require('@assets/icons/plus_icon_blue.png')}
+            label={'Adicionar grupo de exercícios'}
+            onPress={() =>
+              append({
+                numberRepetitions: 0,
+                exercises: [],
+              })
+            }
+          />
+        </HollowButtonContainer>
+
+        <HollowButton
+          imageSource={require('@assets/icons/plus_icon_blue.png')}
+          label={'Replicar treino de referência'}
+          onPress={() => reset({ training: referenceTraining })}
+        />
+      </>
+    );
+  };
+
   return (
     <Controller
       control={control}
-      name={'training'}
-      render={({ field: { onChange, value } }) => {
-        console.log('value', value);
+      name={'training.type'}
+      render={({ field: { value: trainingType } }) => {
         return (
-          <>
-            <Container>
-              <OptionsModal
-                control={control}
-                name={'training.type'}
-                label={'Tipo de treino:'}
-                modalTitle={'Selecione o tipo de treino'}
-              />
-              {exerciseGroups.map((field: any, index: number) => {
-                return (
-                  <GroupContainer key={`GroupContainer-${index}`}>
-                    <GroupName>{`Grupo ${index + 1}:`}</GroupName>
-                    <NumberQuantitySelector
-                      control={control}
-                      name={`training.exerciseGroups.${index}.numberRepetitions`}
-                      label={'Repetir Grupo:'}
-                      description={{ singular: 'vez', plural: 'vezes' }}
-                    />
-                    <CreateExercise name={'training'} index={index} control={control} />
-                  </GroupContainer>
-                );
-              })}
+          <Container>
+            <OptionsModal
+              control={control}
+              name={'training.type'}
+              label={'Tipo de treino:'}
+              modalTitle={'Selecione o tipo de treino'}
+            />
 
-              <HollowButtonContainer>
-                <HollowButton
-                  imageSource={require('@assets/icons/plus_icon_blue.png')}
-                  label={'Adicionar grupo de exercícios'}
-                  onPress={() =>
-                    append({
-                      numberRepetitions: 0,
-                      exercises: [],
-                    })
-                  }
-                />
-              </HollowButtonContainer>
-
-              <HollowButton
-                imageSource={require('@assets/icons/plus_icon_blue.png')}
-                label={'Replicar treino de referência'}
-                onPress={() => reset({ training: referenceTraining })}
-              />
-              {showSaveButton ? (
-                <SaveButton label={'Salvar'} onPress={handleSubmit(onSubmit)} />
-              ) : (
-                <></>
-              )}
-            </Container>
-          </>
+            {isFreeTraining(trainingType) ? (
+              <>
+                <Image source={require('@assets/images/free_training_image.png')} />
+                <ImageDescription>Não existem treinos planejados para este dia.</ImageDescription>
+              </>
+            ) : (
+              renderExerciseGroupsSelection()
+            )}
+            {showSaveButton || isFreeTraining(trainingType) ? (
+              <SaveButton label={'Salvar'} onPress={handleSubmit(onSubmit)} />
+            ) : (
+              <></>
+            )}
+          </Container>
         );
       }}
     />
