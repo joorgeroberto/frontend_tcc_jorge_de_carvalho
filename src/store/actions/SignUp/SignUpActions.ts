@@ -119,7 +119,6 @@ export const SignUpActions = {
           });
           const problemExists = response?.problem && response?.data;
           if (problemExists) {
-            console.log(response);
             return dispatch(handleError({ message: response?.data.message }));
           }
           token = response.data.token;
@@ -136,7 +135,6 @@ export const SignUpActions = {
             type: SIGN_UP_SUCCESS,
           });
         } catch (err) {
-          console.log(err);
           return dispatch(handleError({}));
         }
       }
@@ -198,7 +196,6 @@ export const SignUpActions = {
           );
           const problemExists = response?.problem && response?.data;
           if (problemExists) {
-            console.log(response);
             return dispatch(handleError({ message: response?.data.message }));
           }
           // Se for athlete of monitor, encerrar aqui e navegar para a prox tela de cadastro concluido.
@@ -208,7 +205,6 @@ export const SignUpActions = {
             type: SIGN_UP_SUCCESS,
           });
         } catch (err) {
-          console.log(err);
           return dispatch(handleError({}));
         }
       }
@@ -232,7 +228,6 @@ export const SignUpActions = {
         );
         const problemExists = response?.problem && response?.data;
         if (problemExists) {
-          console.log(response);
           return dispatch(
             handleError({ type: GET_GROUP_LIST_FAIL, message: response?.data.message }),
           );

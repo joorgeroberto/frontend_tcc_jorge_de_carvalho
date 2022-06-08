@@ -47,7 +47,6 @@ export const getDaysBetweenFisrtAndEndDates = ({
   for (let i = 0; i <= numberOfWeeks * 7; i++) {
     month.push(moment(startDate).add(i, 'days').format().toString());
   }
-  console.log(month);
   return month;
 };
 

@@ -46,10 +46,8 @@ export const CreatePlanningActions = {
         });
         const problemExists = response?.problem && response?.data;
         if (problemExists) {
-          console.log('problem', response);
           return handleError(response?.data?.message);
         }
-        console.log('response', response);
         dispatch({
           type: CREATE_PLANNING_SUCCESS,
         });
