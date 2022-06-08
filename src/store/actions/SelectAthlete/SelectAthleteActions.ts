@@ -52,7 +52,6 @@ export const SelectAthleteActions = {
         );
         const problemExists = response?.problem && response?.data;
         if (problemExists) {
-          console.log(response);
           return dispatch(
             handleError({
               type: GET_ALL_ATHLETES_FROM_GROUP_FAIL,
@@ -60,7 +59,6 @@ export const SelectAthleteActions = {
             }),
           );
         }
-        console.log(response);
         dispatch({
           type: GET_ALL_ATHLETES_FROM_GROUP_SUCCESS,
           payload: response.data,

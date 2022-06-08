@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Container,
   Header,
+  Loader,
   ProgressBar,
   AthleteCell,
   AthleteCellContainer,
@@ -10,10 +11,12 @@ import { useNavigation } from '@react-navigation/native';
 
 import { RegisterPlanningNameWeekAndDate } from './RegisterPlanningNameWeekAndDate';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SignUpActions } from '@storeData/actions/SignUp';
 import { CreateReferenceTraining } from './CreateReferenceTraining';
 import { RegisterPlanningWeek } from './RegisterPlanningWeek';
+import { CreatePlanningActions } from '@storeData/actions/CreatePlanning';
+import { RootState } from '@storeData/index';
 
 const quantity = 6;
 
@@ -28,6 +31,7 @@ interface Props {
 export function CreatePlanning({ route }: Props) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const { loading } = useSelector(({ createPlanning }: RootState) => createPlanning);
   const athlete = (route?.params?.athlete as AthleteData) || {};
 
   const [step, setStep] = useState(0);
@@ -47,25 +51,13 @@ export function CreatePlanning({ route }: Props) {
 
   const isFirstStep = useMemo(() => step === 0, [step]);
 
-  const isFourthStep = useMemo(() => step >= 4, [step]);
-
-  // useEffect(() => {
-  //   console.log('referenceTraining', referenceTraining);
-  //   console.log('planningData', planningData);
-  // }, [planningData, referenceTraining]);
+  const isThirdStep = useMemo(() => step >= 2, [step]);
 
   const title = useMemo(() => {
-    // const user_type = signUpData?.user_type;
-
     const isCreateReferenceTrainningStep = step === 1;
     if (isCreateReferenceTrainningStep) {
       return 'Crie um treino de referência';
     }
-
-    // const isAthleteRegisterGroupStep = isFourthStep && user_type !== 'advisor';
-    // if (isAthleteRegisterGroupStep) {
-    //   return 'Qual o seu grupo de corrida?';
-    // }
 
     return 'Cadastrar planejamento';
   }, [step]);
@@ -78,29 +70,33 @@ export function CreatePlanning({ route }: Props) {
   };
 
   const toNextStep = useCallback(() => {
-    if (isFourthStep) {
+    if (isThirdStep) {
       return;
     }
     return setStep(step + 1);
-  }, [isFourthStep, step]);
+  }, [isThirdStep, step]);
 
   const dispatchData = useCallback(
-    (data: PlanningData) => {
-      if (!isFourthStep) {
+    (planning: PlanningData) => {
+      if (!isThirdStep) {
         return;
       }
-      // Add dispatch
-      // return dispatch(SignUpActions.SignUp(data));
-      return data;
+      return dispatch(CreatePlanningActions.CreatePlanning({ planning }));
     },
-    [isFourthStep],
+    [isThirdStep, dispatch],
   );
 
-  const handleOnPressNext = (data: PlanningData) => {
+  const onSave = (data: PlanningData) => {
     let planningDataTemp = { ...planningData };
     Object.keys(data).forEach(key => {
       planningDataTemp[key as keyof PlanningData] = data[key as keyof PlanningData] as never;
     });
+
+    return planningDataTemp;
+  };
+
+  const handleOnPressNext = (data: PlanningData) => {
+    const planningDataTemp = onSave(data);
 
     setPlanningData(planningDataTemp);
     toNextStep();
@@ -118,13 +114,6 @@ export function CreatePlanning({ route }: Props) {
           />
         );
       case 1:
-        // return (
-        //   <RegisterPlanningWeek
-        //     planning={planningData}
-        //     referenceTraining={referenceTraining}
-        //     onSave={data => {}}
-        //   />
-        // );
         return (
           <CreateReferenceTraining
             referenceTraining={referenceTraining}
@@ -139,7 +128,8 @@ export function CreatePlanning({ route }: Props) {
           <RegisterPlanningWeek
             planning={planningData}
             referenceTraining={referenceTraining}
-            onSave={data => console.log(data)}
+            onSubmit={data => handleOnPressNext(data)}
+            onSave={data => onSave(data as PlanningData)}
           />
         );
       default:
@@ -157,18 +147,24 @@ export function CreatePlanning({ route }: Props) {
     <Container>
       <Header title={title} onPressBackButton={toPreviousStep} />
       <ProgressBar quantity={quantity} activeBar={step} />
-      {!isFirstStep && (
-        <AthleteCellContainer>
-          <AthleteCell
-            name={athlete.name}
-            image={athlete.image}
-            description={planningData.name}
-            marginTop={32}
-          />
-        </AthleteCellContainer>
-      )}
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          {!isFirstStep && (
+            <AthleteCellContainer>
+              <AthleteCell
+                name={athlete.name}
+                image={athlete.image}
+                description={planningData.name}
+                marginTop={32}
+              />
+            </AthleteCellContainer>
+          )}
 
-      {renderStep()}
+          {renderStep()}
+        </>
+      )}
     </Container>
   );
 }

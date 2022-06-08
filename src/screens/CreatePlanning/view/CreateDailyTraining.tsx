@@ -24,9 +24,16 @@ interface Props {
   selectedDate: string;
   onSave: (data: TrainingData) => void;
   referenceTraining: TrainingData;
+  isLastDate: boolean;
 }
 
-export function CreateDailyTraining({ training, selectedDate, onSave, referenceTraining }: Props) {
+export function CreateDailyTraining({
+  training,
+  selectedDate,
+  onSave,
+  referenceTraining,
+  isLastDate,
+}: Props) {
   const validationSchema = yup.object().shape({
     training: yup.object().shape({
       date: yup
@@ -89,7 +96,6 @@ export function CreateDailyTraining({ training, selectedDate, onSave, referenceT
   });
 
   useEffect(() => {
-    console.log(errors?.training);
     const showModal = errors?.training?.exerciseGroups?.find((group: any) => {
       if (group?.exercises) {
         return (
@@ -191,7 +197,10 @@ export function CreateDailyTraining({ training, selectedDate, onSave, referenceT
               renderExerciseGroupsSelection()
             )}
             {showSaveButton || isFreeTraining(trainingType) ? (
-              <SaveButton label={'Salvar'} onPress={handleSubmit(onSubmit)} />
+              <SaveButton
+                label={isLastDate ? 'Submeter treinamento' : 'Salvar'}
+                onPress={handleSubmit(onSubmit)}
+              />
             ) : (
               <></>
             )}

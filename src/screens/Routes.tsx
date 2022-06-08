@@ -11,6 +11,7 @@ import {
   SignUpCompleted,
   SelectAthlete,
   CreatePlanning,
+  CreatePlanningCompleted,
 } from '@screens/index';
 
 const Stack = createStackNavigator();
@@ -45,6 +46,7 @@ function Routes() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="SignUpCompleted" component={SignUpCompleted} />
+        <Stack.Screen name="CreatePlanningCompleted" component={CreatePlanningCompleted} />
         <Stack.Screen name="CreatePlanning" component={CreatePlanning} />
       </Stack.Navigator>
     </NavigationContainer>

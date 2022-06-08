@@ -4,6 +4,7 @@ import {
   InputWithLabel,
   Header as RawHeader,
   ProgressBar as RawProgressBar,
+  Loader as RawLoader,
 } from '@components/index';
 import colors from '@config/colors';
 import { AthleteCell as RawAthleteCell } from '@components/AthleteCell';
@@ -26,3 +27,5 @@ export const AthleteCellContainer = styled.View`
 `;
 
 export const AthleteCell = styled(RawAthleteCell).attrs({ borderColor: colors.TRANSPARENT })``;
+
+export const Loader = styled(RawLoader)``;
