@@ -4,6 +4,7 @@ import { LoginReducer } from './LoginReducer';
 import { SignUpReducer } from './SignUpReducer';
 import { SelectAthleteReducer } from './SelectAthleteReducer';
 import { CreatePlanningReducer } from './CreatePlanningReducer';
+import { PlanningDetailsReducer } from './PlanningDetailsReducer';
 
 export default combineReducers({
   register: RegisterReducer,
@@ -11,4 +12,5 @@ export default combineReducers({
   signUp: SignUpReducer,
   selectAthlete: SelectAthleteReducer,
   createPlanning: CreatePlanningReducer,
+  planningDetails: PlanningDetailsReducer,
 });

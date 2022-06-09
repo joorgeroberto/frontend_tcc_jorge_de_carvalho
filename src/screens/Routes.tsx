@@ -12,6 +12,8 @@ import {
   SelectAthlete,
   CreatePlanning,
   CreatePlanningCompleted,
+  PlanningList,
+  PlanningDetails,
 } from '@screens/index';
 
 const Stack = createStackNavigator();
@@ -24,6 +26,8 @@ type AppRootParamList = {
   SignUpCompleted: { isAdvisor: boolean };
   SelectAthlete: { calledFrom?: string };
   CreatePlanning: { athlete: AthleteData };
+  PlanningList: { athleteId: string };
+  PlanningDetails: { planningId: string };
 };
 
 declare global {
@@ -36,7 +40,7 @@ function Routes() {
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
-        initialRouteName="SelectAthlete"
+        initialRouteName="Initial"
         screenOptions={{
           headerShown: false,
         }}>
@@ -48,6 +52,8 @@ function Routes() {
         <Stack.Screen name="SignUpCompleted" component={SignUpCompleted} />
         <Stack.Screen name="CreatePlanningCompleted" component={CreatePlanningCompleted} />
         <Stack.Screen name="CreatePlanning" component={CreatePlanning} />
+        <Stack.Screen name="PlanningList" component={PlanningList} />
+        <Stack.Screen name="PlanningDetails" component={PlanningDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

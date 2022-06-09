@@ -7,6 +7,7 @@ export * from './ProgressBar';
 export * from './ImageSelector';
 export * from './Header';
 export * from './AthleteCell';
+export * from './PlanningCell';
 export * from './Loader';
 export * from './NumberQuantitySelector';
 export * from './MinutesQuantitySelector';

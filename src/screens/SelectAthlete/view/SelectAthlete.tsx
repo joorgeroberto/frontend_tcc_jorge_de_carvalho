@@ -50,9 +50,9 @@ export function SelectAthlete({ route }: Props) {
   const handleOnPress = ({ name, image, id }: handleOnPressProps) => {
     const calledFromHome = route?.params?.calledFrom === 'Home';
 
-    // if (calledFromHome) {
-    navigation.navigate('CreatePlanning', { athlete: { name, image, id } });
-    // }
+    if (calledFromHome) {
+      navigation.navigate('CreatePlanning', { athlete: { name, image, id } });
+    }
   };
 
   return (
