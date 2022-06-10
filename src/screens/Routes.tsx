@@ -27,7 +27,7 @@ type AppRootParamList = {
   SelectAthlete: { calledFrom?: string };
   CreatePlanning: { athlete: AthleteData };
   PlanningList: { athleteId: string };
-  PlanningDetails: { planningId: string };
+  PlanningDetails: { planning: PlanningData };
 };
 
 declare global {

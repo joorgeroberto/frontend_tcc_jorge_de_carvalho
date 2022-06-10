@@ -37,6 +37,7 @@ const Container = styled.View<ContainerProps>`
   margin-top: 20px;
   margin-left: ${({ marginLeft }) => (marginLeft ? marginLeft : 21)}px;
   margin-right: ${({ marginRight }) => (marginRight ? marginRight : 21)}px;
+  background-color: ${colors.WHITE};
 `;
 
 export const Title = styled.Text`

@@ -15,6 +15,7 @@ interface Props {
     };
   };
 }
+
 interface RenderItemProps {
   id: string;
   name: string;
@@ -26,10 +27,7 @@ interface RenderItemProps {
 export function PlanningList({ route }: Props) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { athlete } = useSelector(({ login }: RootState) => login);
   const { loading, plannings } = useSelector(({ planningDetails }: RootState) => planningDetails);
-
-  const isAdvisorUser = athlete?.user_type === 'advisor';
 
   const athleteId = useMemo(() => {
     const athleteIdExists = route?.params?.athleteId && route?.params?.athleteId.length > 0;
@@ -49,6 +47,8 @@ export function PlanningList({ route }: Props) {
 
   const handleOnPress = (id: string) => {
     console.log(id);
+    const selectedPlanning = plannings.find((planning: { id: string }) => planning.id === id);
+    return navigation.navigate('PlanningDetails', { planning: selectedPlanning as PlanningData });
   };
 
   if (loading) {
