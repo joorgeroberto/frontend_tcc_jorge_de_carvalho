@@ -51,3 +51,39 @@ interface Gender {
   type: 'male' | 'female';
   name: 'Masculino' | 'Feminino';
 }
+
+interface AthleteData {
+  id: string;
+  name: string;
+  image?: string;
+}
+
+interface RegisterPlanningNameWeekAndDateReturnData {
+  name: string;
+  numberOfWeeks: number;
+  startDate: string;
+}
+
+interface ExerciseData {
+  type: 'distance' | 'duration';
+  duration: float;
+  distance: float;
+  description: string;
+}
+
+interface ExerciseGroupData {
+  numberRepetitions: number;
+  exercises: Array<ExerciseData>;
+}
+
+interface TrainingData {
+  date: string;
+  type: string;
+  exerciseGroups: Array<ExerciseGroupData>;
+}
+
+interface PlanningData extends RegisterPlanningNameWeekAndDateReturnData {
+  endDate: string;
+  athleteId: string;
+  trainings: Array<TrainingData>;
+}

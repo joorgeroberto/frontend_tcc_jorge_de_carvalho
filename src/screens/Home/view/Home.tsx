@@ -1,20 +1,35 @@
+import { useNavigation } from '@react-navigation/native';
+import { RootState } from '@storeData/index';
 import React, { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Container } from '../styles/Home.styles';
+import { useSelector } from 'react-redux';
+import { Container, Button } from '../styles/Home.styles';
 
 export function Home() {
-  useEffect(() => {
-    const getToken = async () => {
-      try {
-        const value = await AsyncStorage.getItem('token');
-        if (value !== null) {
-          console.log(value);
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    getToken();
-  }, []);
-  return <Container />;
+  const navigation = useNavigation();
+  const { athlete } = useSelector(({ login }: RootState) => login);
+
+  const isAdvisorUser = athlete?.user_type === 'advisor';
+
+  return (
+    <Container>
+      {isAdvisorUser && (
+        <>
+          <Button
+            label="Cadastrar planejamento"
+            onPress={() => navigation.navigate('SelectAthlete', { nextStep: 'CreatePlanning' })}
+            marginBottom={15}
+          />
+          <Button
+            label="Visualizar treinos de um atleta"
+            onPress={() => navigation.navigate('SelectAthlete', { nextStep: 'PlanningList' })}
+            marginBottom={15}
+          />
+        </>
+      )}
+      <Button
+        label="Visualizar meus treinos planejados"
+        onPress={() => navigation.navigate('PlanningList', { athleteId: athlete?.id || '' })}
+      />
+    </Container>
+  );
 }

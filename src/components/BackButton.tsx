@@ -6,17 +6,19 @@ type Props = {
   onPress: () => void;
   width?: number;
   height?: number;
+  flipHorizontally?: Boolean;
 };
 
 export function BackButton(props: Props) {
-  const { onPress, width = 40, height = 40 } = props;
+  const { onPress, width = 40, height = 40, flipHorizontally = false } = props;
 
   return (
-    <Container onPress={onPress} testID="button" width={width} height={height}>
+    <Container onPress={onPress} testID="back-button" width={width} height={height}>
       <Image
         width={width}
         height={height}
         resizeMode="contain"
+        flipHorizontally={flipHorizontally}
         source={require('@assets/icons/back_icon.png')}
       />
     </Container>
@@ -31,6 +33,7 @@ interface ContainerProps {
 interface ImageProps {
   width: number;
   height: number;
+  flipHorizontally: Boolean;
 }
 
 const Container = styled.TouchableOpacity<ContainerProps>`
@@ -47,4 +50,5 @@ const Container = styled.TouchableOpacity<ContainerProps>`
 const Image = styled.Image<ImageProps>`
   width: ${({ width }) => width * 0.18}px;
   height: ${({ height }) => height * 0.28}px;
+  transform: rotate(${({ flipHorizontally }) => (flipHorizontally ? 180 : 0)}deg);
 `;
