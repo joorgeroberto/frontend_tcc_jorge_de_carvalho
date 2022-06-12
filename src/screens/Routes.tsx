@@ -24,7 +24,7 @@ type AppRootParamList = {
   Login: undefined;
   SignUp: undefined;
   SignUpCompleted: { isAdvisor: boolean };
-  SelectAthlete: { calledFrom?: string };
+  SelectAthlete: { nextStep?: string };
   CreatePlanning: { athlete: AthleteData };
   PlanningList: { athleteId: string };
   PlanningDetails: { planning: PlanningData };

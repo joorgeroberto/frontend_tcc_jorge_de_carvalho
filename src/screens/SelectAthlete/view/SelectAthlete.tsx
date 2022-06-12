@@ -23,7 +23,7 @@ interface handleOnPressProps {
 interface Props {
   route?: {
     params?: {
-      calledFrom?: string;
+      nextStep?: string;
     };
   };
 }
@@ -48,10 +48,16 @@ export function SelectAthlete({ route }: Props) {
   }
 
   const handleOnPress = ({ name, image, id }: handleOnPressProps) => {
-    const calledFromHome = route?.params?.calledFrom === 'Home';
+    const nextStep = route?.params?.nextStep || 'CreatePlanning';
 
-    if (calledFromHome) {
+    const goToCreatePlanning = nextStep === 'CreatePlanning';
+    if (goToCreatePlanning) {
       navigation.navigate('CreatePlanning', { athlete: { name, image, id } });
+    }
+
+    const goToPlanningList = nextStep === 'PlanningList';
+    if (goToPlanningList) {
+      navigation.navigate('PlanningList', { athleteId: id || '' });
     }
   };
 

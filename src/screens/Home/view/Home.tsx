@@ -13,11 +13,18 @@ export function Home() {
   return (
     <Container>
       {isAdvisorUser && (
-        <Button
-          label="Cadastrar planejamento"
-          onPress={() => navigation.navigate('SelectAthlete', { calledFrom: 'Home' })}
-          marginBottom={15}
-        />
+        <>
+          <Button
+            label="Cadastrar planejamento"
+            onPress={() => navigation.navigate('SelectAthlete', { nextStep: 'CreatePlanning' })}
+            marginBottom={15}
+          />
+          <Button
+            label="Visualizar treinos de um atleta"
+            onPress={() => navigation.navigate('SelectAthlete', { nextStep: 'PlanningList' })}
+            marginBottom={15}
+          />
+        </>
       )}
       <Button
         label="Visualizar meus treinos planejados"

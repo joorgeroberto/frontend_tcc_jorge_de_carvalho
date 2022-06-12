@@ -3,7 +3,15 @@ import { RootState } from '@storeData/index';
 import React, { useEffect, useMemo } from 'react';
 import { Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Loader, Header, StyledFlatList } from '../styles/PlanningList.styles';
+import {
+  Container,
+  Loader,
+  Header,
+  StyledFlatList,
+  EmptyListContainer,
+  EmptyListImage,
+  EmptyListText,
+} from '../styles/PlanningList.styles';
 
 import { PlanningDetailsActions } from '@storeData/actions/PlanningDetails';
 import { PlanningCell } from '@components/PlanningCell';
@@ -58,19 +66,27 @@ export function PlanningList({ route }: Props) {
   return (
     <Container>
       <Header title={'Selecione um planejamento'} onPressBackButton={() => navigation.goBack()} />
-      <StyledFlatList
-        data={plannings}
-        renderItem={({ item: { id, name, startDate, endDate } }: any) => {
-          const cellData: RenderItemProps = {
-            id,
-            name,
-            startDate,
-            endDate,
-            onPress: () => handleOnPress(id),
-          };
-          return PlanningCell(cellData);
-        }}
-      />
+
+      {plannings?.length > 0 ? (
+        <StyledFlatList
+          data={plannings}
+          renderItem={({ item: { id, name, startDate, endDate } }: any) => {
+            const cellData: RenderItemProps = {
+              id,
+              name,
+              startDate,
+              endDate,
+              onPress: () => handleOnPress(id),
+            };
+            return PlanningCell(cellData);
+          }}
+        />
+      ) : (
+        <EmptyListContainer>
+          <EmptyListImage source={require('@assets/images/free_training_image.png')} />
+          <EmptyListText>Não existem planejamentos cadastrados para este atleta.</EmptyListText>
+        </EmptyListContainer>
+      )}
     </Container>
   );
 }
