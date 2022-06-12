@@ -46,7 +46,7 @@ export function RegisterPlanningNameWeekAndDate({
 
   const onSubmit = (info: any) => {
     info.endDate = moment(info.startDate)
-      .add(7 * info.numberOfWeeks, 'days')
+      .add(7 * info.numberOfWeeks - 1, 'days')
       .format();
 
     onPress(info);

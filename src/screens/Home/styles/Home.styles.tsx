@@ -9,8 +9,13 @@ export const Container = styled.View`
   background-color: ${colors.WHITE};
 `;
 
-export const Button = styled(RawButton)`
+interface ButtonProps {
+  marginBottom?: number;
+}
+
+export const Button = styled(RawButton)<ButtonProps>`
   width: 100%;
   padding-left: 10px;
   padding-right: 10px;
+  margin-bottom: ${({ marginBottom }) => (marginBottom ? marginBottom : 0)}px;
 `;

@@ -124,7 +124,7 @@ export function CreateReferenceTraining({ referenceTraining, onPress }: Props) {
     <Container>
       {exerciseGroups.map((field: any, index: number) => {
         return (
-          <GroupContainer key={`GroupContainer-${index}`}>
+          <GroupContainer key={`GroupContainer-Reference-${index}`}>
             <GroupName>{`Grupo ${index + 1}:`}</GroupName>
             <NumberQuantitySelector
               control={control}

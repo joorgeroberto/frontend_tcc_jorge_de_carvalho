@@ -1,4 +1,5 @@
 import colors from '@config/colors';
+import { getFormatedMinutes } from '@utils/utils';
 import React, { useCallback, useMemo } from 'react';
 import { Controller } from 'react-hook-form';
 import { Dimensions } from 'react-native';
@@ -42,16 +43,6 @@ export function MinutesQuantitySelector({
     return value - 0.5;
   }
 
-  const getValueText = useCallback((value: number) => {
-    const formatedValue = Number(value).toFixed(1);
-    const [hour, minutes] = formatedValue.toString().split('.');
-
-    const formatedHour = Number(hour) < 10 ? `0${hour}` : hour;
-    const formatedMinutes = Number(minutes) === 5 ? '30' : '00';
-
-    return `${formatedHour}:${formatedMinutes}`;
-  }, []);
-
   return (
     <Controller
       control={control}
@@ -65,7 +56,7 @@ export function MinutesQuantitySelector({
                 type="minus"
                 onPress={() => onChange(handleOnChange({ type: 'minus', value: value }))}
               />
-              <ValueText>{getValueText(value)}</ValueText>
+              <ValueText>{getFormatedMinutes(value)}</ValueText>
               <QuantityButton
                 type="plus"
                 onPress={() => onChange(handleOnChange({ type: 'plus', value: value }))}

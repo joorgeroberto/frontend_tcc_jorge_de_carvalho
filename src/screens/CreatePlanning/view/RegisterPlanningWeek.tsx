@@ -16,7 +16,9 @@ export function RegisterPlanningWeek({ planning, referenceTraining, onSave, onSu
   const [selectedTraining, setSelectedTraining] = useState<TrainingData | null>(null);
 
   useEffect(() => {
-    const trainingDataExists = planning?.trainings?.length > 0;
+    const trainingDataExists =
+      planning?.trainings?.length > 0 &&
+      planning?.trainings?.length === 7 * planning.numberOfWeeks - 1;
     if (trainingDataExists) {
       return;
     }
@@ -25,6 +27,7 @@ export function RegisterPlanningWeek({ planning, referenceTraining, onSave, onSu
       startDate: dataAux.startDate,
       numberOfWeeks: dataAux.numberOfWeeks,
     });
+    console.log(trainingDays);
     trainingDays.map(day =>
       dataAux.trainings.push({ date: day, type: 'free', exerciseGroups: [] }),
     );

@@ -44,7 +44,7 @@ export const getDaysBetweenFisrtAndEndDates = ({
   numberOfWeeks,
 }: GetDaysBetweenFisrtAndEndDatesProps) => {
   let month: Array<string> = [];
-  for (let i = 0; i <= numberOfWeeks * 7; i++) {
+  for (let i = 0; i <= 7 * numberOfWeeks - 1; i++) {
     month.push(moment(startDate).add(i, 'days').format().toString());
   }
   return month;
@@ -67,7 +67,7 @@ export const calculateMonthDays = ({
   weeksQuantity,
 }: CalculateMonthDaysProps) => {
   const daysQuantity = weeksQuantity * 7;
-  const month: Array<MonthDay> = [];
+  let month: Array<MonthDay> = [];
 
   function prePopulateMonthArray() {
     let count = 0;
@@ -116,4 +116,14 @@ export const calculateMonthDays = ({
   populateDaysAfterFirstDay(firstDayIndex);
 
   return month;
+};
+
+export const getFormatedMinutes = (value: number) => {
+  const formatedValue = Number(value).toFixed(1);
+  const [hour, minutes] = formatedValue.toString().split('.');
+
+  const formatedHour = Number(hour) < 10 ? `0${hour}` : hour;
+  const formatedMinutes = Number(minutes) === 5 ? '30' : '00';
+
+  return `${formatedHour}:${formatedMinutes}`;
 };

@@ -1,5 +1,5 @@
 import colors from '@config/colors';
-import { calculateMonthDays, getWeekDay, weekDays } from '@utils/utils';
+import { calculateMonthDays, formatDate, getWeekDay, weekDays } from '@utils/utils';
 import moment from 'moment';
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components/native';
@@ -19,8 +19,6 @@ interface HandleOnSelectDayProps {
   isDisabled: boolean;
   currentDate: string;
 }
-
-// const weekDaysDate = [31, 2, 3, 4, 5, 6, 7];
 
 export function WeekSelector({
   startDate,
@@ -88,15 +86,13 @@ export function WeekSelector({
           const currentDate = new Date(weekDaysDate[currentDayIndex].fullDate);
           const isDisabled =
             moment(currentDate) < moment(startDate) || moment(currentDate) > moment(endDate);
-          const isSelected = new Date(selectedDate).toString() === currentDate.toString();
+          const isSelected =
+            formatDate(new Date(selectedDate).toString()) === formatDate(currentDate.toString());
 
           return (
             <WeekDayContainer
               key={`WeekDayContainer-${index}`}
               onPress={() =>
-                //disableSelection
-                //</DaysContainer>? {}
-                //:
                 handleOnSelectDay({
                   isSelected,
                   isDisabled,

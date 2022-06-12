@@ -140,7 +140,7 @@ export function CreateDailyTraining({
       <>
         {exerciseGroups.map((_: any, index: number) => {
           return (
-            <GroupContainer key={`GroupContainer-${index}`}>
+            <GroupContainer key={`renderExerciseGroupsSelection-${index}`}>
               <GroupName>{`Grupo ${index + 1}:`}</GroupName>
               <NumberQuantitySelector
                 control={control}

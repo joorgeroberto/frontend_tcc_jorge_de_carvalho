@@ -16,6 +16,7 @@ export function Home() {
         <Button
           label="Cadastrar planejamento"
           onPress={() => navigation.navigate('SelectAthlete', { calledFrom: 'Home' })}
+          marginBottom={15}
         />
       )}
       <Button
