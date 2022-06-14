@@ -19,14 +19,7 @@ import {
   OptionalIndicatorText,
   OptionalIndicatorIcon,
   PerformedTrainingButton,
-  ExerciseGroupContainer,
-  ExerciseGroupNumberOfRepetitionsContainer,
-  ExerciseGroupNumberOfRepetitionsText,
-  ExercisesContainer,
-  ExerciseItemContainer,
-  ExerciseDistanceText,
-  ExerciseTimeText,
-  ExerciseDesscriptionText,
+  ExerciseGroupsTable,
 } from '../styles/PlanningDetails.styles';
 
 interface Props {
@@ -72,8 +65,8 @@ export function PlanningDetails({ route }: Props) {
   const isOptionalTraining = training.type === 'optional';
 
   const showSavePerformedTrainingButton = () => {
-    const selected = formatDate(new Date(selectedDate).toString());
-    const todayDate = formatDate(new Date().toString());
+    const selected = new Date(selectedDate).toString();
+    const todayDate = new Date().toString();
 
     const dayPassed = moment(todayDate) >= moment(selected);
     const isSameAthlete = athlete?.id === planning?.athleteId;
@@ -117,38 +110,18 @@ export function PlanningDetails({ route }: Props) {
                 </OptionalIndicatorText>
               </OptionalIndicatorContainer>
             )}
-            {training?.exerciseGroups?.map(exerciseGroup => (
-              <ExerciseGroupContainer>
-                <ExerciseGroupNumberOfRepetitionsContainer>
-                  <ExerciseGroupNumberOfRepetitionsText>
-                    {exerciseGroup?.numberRepetitions}x
-                  </ExerciseGroupNumberOfRepetitionsText>
-                </ExerciseGroupNumberOfRepetitionsContainer>
-                <ExercisesContainer>
-                  {exerciseGroup?.exercises?.map((exercise, index) => (
-                    <ExerciseItemContainer
-                      isLastItem={index === exerciseGroup?.exercises.length - 1}>
-                      {exercise?.type === 'distance' ? (
-                        <ExerciseDistanceText>
-                          {Number(exercise?.distance).toFixed(1)} KMs
-                        </ExerciseDistanceText>
-                      ) : (
-                        <ExerciseTimeText>
-                          {getFormatedMinutes(exercise?.duration)} minutos
-                        </ExerciseTimeText>
-                      )}
-                      <ExerciseDesscriptionText>{exercise?.description}</ExerciseDesscriptionText>
-                    </ExerciseItemContainer>
-                  ))}
-                </ExercisesContainer>
-              </ExerciseGroupContainer>
-            ))}
+            <ExerciseGroupsTable training={training} />
 
             {showSavePerformedTrainingButton() && (
               <PerformedTrainingButton
                 imageSource={require('@assets/icons/athlete_button_icon.png')}
-                label={'Registar dados de treino'}
-                onPress={() => console.log('To next step')}
+                label={'Registrar dados de treino'}
+                onPress={() =>
+                  navigation.navigate('RegisterPerformedTraining', {
+                    training,
+                    planningName: planning?.name,
+                  })
+                }
               />
             )}
           </>
