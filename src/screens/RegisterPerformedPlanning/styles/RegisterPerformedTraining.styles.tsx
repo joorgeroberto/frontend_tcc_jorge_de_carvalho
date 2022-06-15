@@ -6,6 +6,7 @@ import {
   Loader as RawLoader,
   Header as RawHeader,
   ExerciseGroupsTable as RawExerciseGroupsTable,
+  InputWithLabel,
 } from '@components/index';
 const windowWidth = Dimensions.get('window').width;
 
@@ -23,9 +24,10 @@ export const Loader = styled(RawLoader)``;
 
 export const SaveButtonContainer = styled.View`
   width: 100%;
-  height: 45px;
+  height: 65px;
   align-items: center;
   justify-content: center;
+  padding-top: 20px;
   background-color: ${colors.WHITE};
 `;
 
@@ -34,6 +36,7 @@ export const SaveButton = styled(RawButton)``;
 export const StyledScrollView = styled.ScrollView`
   flex: 1;
   /* width: ${windowWidth - 42}px; */
+  padding-top: 21px;
   background-color: white;
   width: 100%;
 `;
@@ -95,3 +98,11 @@ export const Divider = styled.View`
 `;
 
 export const ExerciseGroupsTable = styled(RawExerciseGroupsTable)``;
+
+export const Input = styled(InputWithLabel)`
+  flex: 1;
+  width: 100%;
+  padding: 20px;
+  justify-content: space-between;
+  background-color: white;
+`;
