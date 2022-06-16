@@ -87,3 +87,15 @@ interface PlanningData extends RegisterPlanningNameWeekAndDateReturnData {
   athleteId: string;
   trainings: Array<TrainingData>;
 }
+
+interface PerformedTraining {
+  calories: number;
+  duration: string;
+  distance: string;
+  vMed: number;
+  vMax: number;
+  fcRest: number;
+  fcMed: number;
+  fcMax: number;
+  trainingId?: string;
+}

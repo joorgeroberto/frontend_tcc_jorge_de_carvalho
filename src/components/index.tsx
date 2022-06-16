@@ -14,3 +14,4 @@ export * from './MinutesQuantitySelector';
 export * from './OptionsModal';
 export * from './WeekSelector';
 export * from './ExerciseTypeTabs';
+export * from './ExerciseGroupsTable';

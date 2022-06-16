@@ -5,3 +5,4 @@ export { SignUp, SignUpCompleted } from './SignUp';
 export { SelectAthlete } from './SelectAthlete';
 export { CreatePlanning, CreatePlanningCompleted } from './CreatePlanning';
 export { PlanningList, PlanningDetails } from './PlanningDetails';
+export { RegisterPerformedTraining } from './RegisterPerformedPlanning';
