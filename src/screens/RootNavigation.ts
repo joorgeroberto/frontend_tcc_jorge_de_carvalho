@@ -24,3 +24,7 @@ export function navigate({ name, params, reset = false }: NavigateProps) {
   /* @ts-ignore */
   navigationRef.navigate(name, params);
 }
+
+export function goBack() {
+  return navigationRef.dispatch(CommonActions.goBack());
+}

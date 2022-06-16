@@ -22,7 +22,7 @@ import {
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { PlanningDetailsActions } from '@storeData/actions/PlanningDetails';
+import { PerformedTrainingActions } from '@storeData/actions/PerformedTraining';
 import { formatDate } from '@utils/utils';
 import { useForm } from 'react-hook-form';
 
@@ -39,22 +39,14 @@ interface Props {
   };
 }
 
-interface RenderItemProps {
-  id: string;
-  name: string;
-  startDate: string;
-  endDate: string;
-  onPress: () => void;
-}
-
 export function RegisterPerformedTraining({ route }: Props) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { loading, plannings } = useSelector(({ planningDetails }: RootState) => planningDetails);
+  const { loading } = useSelector(({ performedTraining }: RootState) => performedTraining);
   const [isTrainingInfoOpen, setTrainingInfoOpen] = useState(false);
 
-  const training: TrainingData = useMemo(() => {
-    return route?.params?.training as TrainingData;
+  const training: any = useMemo(() => {
+    return route?.params?.training;
   }, [route]);
 
   const validationSchema = yup.object().shape({
@@ -130,8 +122,10 @@ export function RegisterPerformedTraining({ route }: Props) {
     console.log(errors);
   }, [errors]);
 
-  const onSubmit = (data: any) => {
-    return console.log(data);
+  const onSubmit = (data: PerformedTraining) => {
+    data.trainingId = training.id;
+    dispatch(PerformedTrainingActions.Register(data));
+    // return Alert.alert(email, password);
   };
 
   const renderTrainingInfo = () => {
@@ -153,7 +147,7 @@ export function RegisterPerformedTraining({ route }: Props) {
               <TrainingInfoText>{route?.params?.planningName}</TrainingInfoText>
             </TrainingInfoRow>
             <Divider />
-            <ExerciseGroupsTable training={training} />
+            <ExerciseGroupsTable training={training as TrainingData} />
           </>
         )}
       </TrainingInfoContainer>
