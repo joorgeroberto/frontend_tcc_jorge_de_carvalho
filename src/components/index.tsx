@@ -1,6 +1,7 @@
 export * from './Button';
 export * from './BackButton';
 export * from './QuantityButton';
+export * from './HamburguerButton';
 export * from './InputWithLabel';
 export * from './OneLineInput';
 export * from './ProgressBar';
