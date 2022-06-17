@@ -20,6 +20,7 @@ interface Props {
   route?: {
     params?: {
       athleteId?: string;
+      nextStep?: string;
     };
   };
 }
@@ -54,8 +55,14 @@ export function PlanningList({ route }: Props) {
   }, [dispatch, athleteId]);
 
   const handleOnPress = (id: string) => {
-    console.log(id);
+    const goToTrainingList = route?.params?.nextStep === 'PerformedTrainingList';
     const selectedPlanning = plannings.find((planning: { id: string }) => planning.id === id);
+    if (goToTrainingList) {
+      return navigation.navigate('PerformedTrainingList', {
+        planning: selectedPlanning as PlanningData,
+      });
+    }
+
     return navigation.navigate('PlanningDetails', { planning: selectedPlanning as PlanningData });
   };
 

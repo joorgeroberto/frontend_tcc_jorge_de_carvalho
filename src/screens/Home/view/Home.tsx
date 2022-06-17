@@ -30,6 +30,15 @@ export function Home() {
         label="Visualizar meus treinos planejados"
         onPress={() => navigation.navigate('PlanningList', { athleteId: athlete?.id || '' })}
       />
+      <Button
+        label="Visualizar meus treinos realizados"
+        onPress={() =>
+          navigation.navigate('PlanningList', {
+            athleteId: athlete?.id || '',
+            nextStep: 'PerformedTrainingList',
+          })
+        }
+      />
     </Container>
   );
 }

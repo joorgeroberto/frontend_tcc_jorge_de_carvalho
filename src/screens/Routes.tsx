@@ -15,6 +15,8 @@ import {
   PlanningList,
   PlanningDetails,
   RegisterPerformedTraining,
+  PerformedTrainingList,
+  PerformedTrainingDetails,
 } from '@screens/index';
 
 const Stack = createStackNavigator();
@@ -27,8 +29,10 @@ type AppRootParamList = {
   SignUpCompleted: { isAdvisor: boolean };
   SelectAthlete: { nextStep?: string };
   CreatePlanning: { athlete: AthleteData };
-  PlanningList: { athleteId: string };
+  PlanningList: { athleteId: string; nextStep?: string };
   PlanningDetails: { planning: PlanningData };
+  PerformedTrainingList: { planning: PlanningData };
+  PerformedTrainingDetails: { performedTraining: PerformedTraining };
   RegisterPerformedTraining: { training: TrainingData; planningName: string };
 };
 
@@ -57,6 +61,8 @@ function Routes() {
         <Stack.Screen name="PlanningList" component={PlanningList} />
         <Stack.Screen name="PlanningDetails" component={PlanningDetails} />
         <Stack.Screen name="RegisterPerformedTraining" component={RegisterPerformedTraining} />
+        <Stack.Screen name="PerformedTrainingList" component={PerformedTrainingList} />
+        <Stack.Screen name="PerformedTrainingDetails" component={PerformedTrainingDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );
