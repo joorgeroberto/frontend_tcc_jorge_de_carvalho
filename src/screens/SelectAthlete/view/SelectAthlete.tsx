@@ -59,6 +59,14 @@ export function SelectAthlete({ route }: Props) {
     if (goToPlanningList) {
       navigation.navigate('PlanningList', { athlete: { name, image, id } });
     }
+
+    const goToPerformedTrainingList = nextStep === 'PerformedTrainingList';
+    if (goToPerformedTrainingList) {
+      navigation.navigate('PlanningList', {
+        athlete: { name, image, id },
+        nextStep: 'PerformedTrainingList',
+      });
+    }
   };
 
   return (
