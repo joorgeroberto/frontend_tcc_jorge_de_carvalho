@@ -1,7 +1,8 @@
 import { API_BASE_URL } from '@config/Api';
 import { useNavigation } from '@react-navigation/native';
 import { RootState } from '@storeData/index';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated } from 'react-native';
 import { useSelector } from 'react-redux';
 import {
   Container,
@@ -31,6 +32,24 @@ export function Home() {
   const isAdvisorUser = athlete?.user_type === 'advisor';
 
   const isMonitorUser = athlete?.user_type === 'monitor';
+
+  const moveAnim = useRef(new Animated.Value(0)).current;
+
+  const fadeIn = () => {
+    Animated.timing(moveAnim, {
+      toValue: 249,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const fadeOut = () => {
+    Animated.timing(moveAnim, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  };
 
   const renderMenuOptions = () => {
     return (
@@ -95,13 +114,23 @@ export function Home() {
 
   return (
     <Container>
-      <InfoContainer isMenuVisible={isMenuVisible} />
+      <InfoContainer
+        isMenuVisible={isMenuVisible}
+        style={{ transform: [{ translateX: moveAnim }] }}
+      />
       {renderMenuOptions()}
       <HeaderContainer>
         <ImageAndButtonContainer>
           <HamburguerButton
             isMenuVisible={isMenuVisible}
-            onPress={() => setMenuVisibility(isOpen => !isOpen)}
+            onPress={() =>
+              setMenuVisibility(isOpen => {
+                const newValue = !isOpen;
+                newValue ? fadeIn() : fadeOut();
+
+                return newValue;
+              })
+            }
           />
           <Image source={{ uri: `${API_BASE_URL}/files/${athlete?.image}` }} />
         </ImageAndButtonContainer>

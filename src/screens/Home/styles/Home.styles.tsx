@@ -1,7 +1,7 @@
 import colors from '@config/colors';
 import styled from 'styled-components/native';
 import { Button as RawButton, HamburguerButton as RawHamburguerButton } from '@components/index';
-import { Dimensions } from 'react-native';
+import { Dimensions, Animated } from 'react-native';
 const windowWidth = Dimensions.get('window').width;
 
 const menuWidth = 249;
@@ -45,13 +45,13 @@ interface InfoContainerProps {
   isMenuVisible?: boolean;
 }
 
-export const InfoContainer = styled.ScrollView<InfoContainerProps>`
+export const InfoContainer = styled(Animated.ScrollView)<InfoContainerProps>`
   flex: 1;
   width: 100%;
   height: 100%;
   position: absolute;
   top: 0;
-  left: ${({ isMenuVisible }) => (isMenuVisible ? menuWidth : 0)}px;
+  left: 0;
   padding-top: 180px;
   background-color: ${colors.WHITE};
 `;
@@ -105,7 +105,7 @@ export const HelloText = styled(HomeText)`
 `;
 
 export const NameText = styled(HomeText)`
-  color: ${({ isMenuVisible }) => (isMenuVisible ? colors.WHITE : colors.PRIMARY2)};
+  color: ${({ isMenuVisible }) => (isMenuVisible ? colors.WHITE : colors.PRIMARY3)};
 `;
 
 export const HamburguerButton = styled(RawHamburguerButton)``;
