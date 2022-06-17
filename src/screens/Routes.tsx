@@ -29,10 +29,15 @@ type AppRootParamList = {
   SignUpCompleted: { isAdvisor: boolean };
   SelectAthlete: { nextStep?: string };
   CreatePlanning: { athlete: AthleteData };
-  PlanningList: { athleteId: string; nextStep?: string };
+  PlanningList: { athlete: AthleteData; nextStep?: string };
   PlanningDetails: { planning: PlanningData };
-  PerformedTrainingList: { planning: PlanningData };
-  PerformedTrainingDetails: { performedTraining: PerformedTraining };
+  PerformedTrainingList: { planning: PlanningData; athlete: AthleteData };
+  PerformedTrainingDetails: {
+    performedTraining: PerformedTraining;
+    planning: PlanningData;
+    athlete: AthleteData;
+    trainingDate: string;
+  };
   RegisterPerformedTraining: { training: TrainingData; planningName: string };
 };
 

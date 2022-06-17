@@ -9,6 +9,7 @@ interface LoginState {
 interface Athlete {
   id: string;
   name: string;
+  image: string | null;
   user_type: string | number;
   email: string;
   phone: string;
@@ -20,10 +21,10 @@ interface Athlete {
 
 const formatAthleteData = (data: any): Athlete => {
   const {
-    athlete: { id, name, user_type, email, phone, birthdate, gender, created_at },
+    athlete: { id, name, user_type, email, phone, birthdate, gender, created_at, image },
     token,
   } = data;
-  return { id, name, user_type, email, phone, birthdate, gender, created_at, token };
+  return { id, name, user_type, email, phone, birthdate, gender, created_at, token, image };
 };
 
 const loginInitialState: LoginState = {

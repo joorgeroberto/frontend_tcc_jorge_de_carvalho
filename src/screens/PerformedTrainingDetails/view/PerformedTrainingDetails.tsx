@@ -12,11 +12,16 @@ import {
 } from '../styles/PerformedTrainingDetails.styles';
 import { TrainingCell } from '@components/TrainingCell';
 import { string } from 'yup';
+import { Alert } from 'react-native';
+import { AthleteInfo } from '@components/AthleteInfo';
 
 interface Props {
   route?: {
     params?: {
       performedTraining?: PerformedTraining;
+      trainingDate?: any;
+      athlete?: AthleteData;
+      planning?: PlanningData;
     };
   };
 }
@@ -34,6 +39,26 @@ export function PerformedTrainingDetails({ route }: Props) {
     return route?.params?.performedTraining as PerformedTraining;
   }, [route]);
 
+  const planning = useMemo(() => {
+    return route?.params?.planning as PlanningData;
+  }, [route]);
+
+  const trainingDate = useMemo(() => {
+    return route?.params?.trainingDate as string;
+  }, [route]);
+
+  const athlete: AthleteData = useMemo(() => {
+    console.log(route?.params?.athlete);
+    const id: string = route?.params?.athlete?.id || '';
+    const athleteIdExists = id && id.length > 0;
+    if (athleteIdExists) {
+      return route?.params?.athlete as AthleteData;
+    }
+
+    Alert.alert('Atleta não encontrado', 'Por favor, tente novamente com outro atleta');
+    return {} as AthleteData;
+  }, [route]);
+
   const renderTrainingData = ({ description, data, position }: RenderTrainingDataProps) => {
     return (
       <TrainingDataContainer showRightBorder={position === 'left'}>
@@ -46,6 +71,13 @@ export function PerformedTrainingDetails({ route }: Props) {
   return (
     <Container>
       <Header title={'Treino realizado'} onPressBackButton={() => navigation.goBack()} />
+      <AthleteInfo
+        name={athlete?.name}
+        image={athlete?.image}
+        planningName={planning?.name}
+        trainingDate={trainingDate}
+      />
+
       <ResultsText>Resultados obtidos:</ResultsText>
       <StyledScrollView>
         <ResultsRowContainer>

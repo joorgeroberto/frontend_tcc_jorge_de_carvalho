@@ -28,13 +28,17 @@ export function Home() {
       )}
       <Button
         label="Visualizar meus treinos planejados"
-        onPress={() => navigation.navigate('PlanningList', { athleteId: athlete?.id || '' })}
+        onPress={() =>
+          navigation.navigate('PlanningList', {
+            athlete: (athlete as AthleteData) || ({} as AthleteData),
+          })
+        }
       />
       <Button
         label="Visualizar meus treinos realizados"
         onPress={() =>
           navigation.navigate('PlanningList', {
-            athleteId: athlete?.id || '',
+            athlete: (athlete as AthleteData) || ({} as AthleteData),
             nextStep: 'PerformedTrainingList',
           })
         }

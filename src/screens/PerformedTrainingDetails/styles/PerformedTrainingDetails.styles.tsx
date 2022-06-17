@@ -20,13 +20,14 @@ export const ResultsText = styled.Text`
   font-weight: 700;
   font-size: 16px;
   line-height: 19px;
+  margin-top: 21px;
   color: ${colors.PRIMARY};
 `;
 
 export const StyledScrollView = styled.ScrollView`
   flex: 1;
   width: 100%;
-  margin-top: 21px;
+  padding-top: 11px;
   background-color: ${colors.WHITE};
 `;
 
@@ -60,14 +61,14 @@ export const TrainingDataContainer = styled.View<TrainingDataContainerProps>`
 
 export const TrainingData = styled.Text`
   font-weight: 700;
-  font-size: 35px;
+  font-size: 29px;
   line-height: 41px;
   color: ${colors.PRIMARY};
 `;
 
 export const TrainingDataDescription = styled.Text`
   font-weight: 700;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 19px;
   margin-top: 3px;
   color: ${colors.PRIMARY3};
