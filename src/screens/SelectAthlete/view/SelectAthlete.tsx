@@ -57,7 +57,15 @@ export function SelectAthlete({ route }: Props) {
 
     const goToPlanningList = nextStep === 'PlanningList';
     if (goToPlanningList) {
-      navigation.navigate('PlanningList', { athleteId: id || '' });
+      navigation.navigate('PlanningList', { athlete: { name, image, id } });
+    }
+
+    const goToPerformedTrainingList = nextStep === 'PerformedTrainingList';
+    if (goToPerformedTrainingList) {
+      navigation.navigate('PlanningList', {
+        athlete: { name, image, id },
+        nextStep: 'PerformedTrainingList',
+      });
     }
   };
 

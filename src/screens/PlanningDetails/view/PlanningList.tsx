@@ -15,11 +15,13 @@ import {
 
 import { PlanningDetailsActions } from '@storeData/actions/PlanningDetails';
 import { PlanningCell } from '@components/PlanningCell';
+import { AthleteInfo } from '@components/AthleteInfo';
 
 interface Props {
   route?: {
     params?: {
-      athleteId?: string;
+      athlete?: AthleteData;
+      nextStep?: string;
     };
   };
 }
@@ -37,25 +39,35 @@ export function PlanningList({ route }: Props) {
   const dispatch = useDispatch();
   const { loading, plannings } = useSelector(({ planningDetails }: RootState) => planningDetails);
 
-  const athleteId = useMemo(() => {
-    const athleteIdExists = route?.params?.athleteId && route?.params?.athleteId.length > 0;
+  const athlete: AthleteData = useMemo(() => {
+    console.log(route?.params?.athlete);
+    const id: string = route?.params?.athlete?.id || '';
+    const athleteIdExists = id && id.length > 0;
     if (athleteIdExists) {
-      return route?.params?.athleteId;
+      return route?.params?.athlete as AthleteData;
     }
 
-    return Alert.alert('Atleta não encontrado', 'Por favor, tente novamente com outro atleta');
+    Alert.alert('Atleta não encontrado', 'Por favor, tente novamente com outro atleta');
+    return {} as AthleteData;
   }, [route]);
 
   useEffect(() => {
-    const athleteIdExists = athleteId && athleteId.length > 0;
+    const athleteIdExists = athlete.id && athlete.id.length > 0;
     if (athleteIdExists) {
-      dispatch(PlanningDetailsActions.GetAllPlanningsFromAthlete({ athleteId }));
+      dispatch(PlanningDetailsActions.GetAllPlanningsFromAthlete({ athleteId: athlete.id }));
     }
-  }, [dispatch, athleteId]);
+  }, [dispatch, athlete.id]);
 
   const handleOnPress = (id: string) => {
-    console.log(id);
+    const goToTrainingList = route?.params?.nextStep === 'PerformedTrainingList';
     const selectedPlanning = plannings.find((planning: { id: string }) => planning.id === id);
+    if (goToTrainingList) {
+      return navigation.navigate('PerformedTrainingList', {
+        planning: selectedPlanning as PlanningData,
+        athlete: athlete as AthleteData,
+      });
+    }
+
     return navigation.navigate('PlanningDetails', { planning: selectedPlanning as PlanningData });
   };
 
@@ -68,19 +80,22 @@ export function PlanningList({ route }: Props) {
       <Header title={'Selecione um planejamento'} onPressBackButton={() => navigation.goBack()} />
 
       {plannings?.length > 0 ? (
-        <StyledFlatList
-          data={plannings}
-          renderItem={({ item: { id, name, startDate, endDate } }: any) => {
-            const cellData: RenderItemProps = {
-              id,
-              name,
-              startDate,
-              endDate,
-              onPress: () => handleOnPress(id),
-            };
-            return PlanningCell(cellData);
-          }}
-        />
+        <>
+          <AthleteInfo name={athlete?.name} image={athlete?.image} />
+          <StyledFlatList
+            data={plannings}
+            renderItem={({ item: { id, name, startDate, endDate } }: any) => {
+              const cellData: RenderItemProps = {
+                id,
+                name,
+                startDate,
+                endDate,
+                onPress: () => handleOnPress(id),
+              };
+              return PlanningCell(cellData);
+            }}
+          />
+        </>
       ) : (
         <EmptyListContainer>
           <EmptyListImage source={require('@assets/images/free_training_image.png')} />
